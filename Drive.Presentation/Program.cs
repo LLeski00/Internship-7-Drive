@@ -1,2 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Drive.Presentation.Extensions;
+using Drive.Presentation.Factories;
+
+var loginMenuActions = LoginMenuFactory.CreateActions();
+loginMenuActions.PrintActionsAndOpen();
