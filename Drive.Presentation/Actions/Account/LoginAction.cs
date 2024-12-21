@@ -1,8 +1,8 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Presentation.Abstractions;
-using Drive.Presentation.Extensions;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Repositories;
+using Drive.Presentation.Extensions;
 
 namespace Drive.Presentation.Actions.Account
 {
@@ -26,12 +26,12 @@ namespace Drive.Presentation.Actions.Account
                 if (cont)
                     user = FindUser();
                 else
-                    ActionExtensions.PrintActions();
+                    return;
             }
 
             Console.WriteLine("Successfully logged in.");
             Console.ReadLine();
-            ActionExtensions.PrintActions(user);
+            UserExtensions.PrintUserActions(user);
         }
 
         public User? FindUser()

@@ -1,6 +1,6 @@
-﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
+﻿using Drive.Presentation.Abstractions;
 using Drive.Presentation.Actions;
+using Drive.Presentation.Helpers;
 
 namespace Drive.Presentation.Extensions;
 
@@ -11,7 +11,6 @@ public static class ActionExtensions
         const string INVALID_INPUT_MSG = "Please type in number!";
         const string INVALID_ACTION_MSG = "Please select valid action!";
 
-
         var isExitSelected = false;
         do
         {
@@ -20,14 +19,14 @@ public static class ActionExtensions
             var isValidInput = int.TryParse(Console.ReadLine(), out var actionIndex);
             if (!isValidInput)
             {
-                PrintErrorMessage(INVALID_INPUT_MSG);
+                Writer.Error(INVALID_INPUT_MSG);
                 continue;
             }
 
             var action = actions.FirstOrDefault(a => a.MenuIndex == actionIndex);
             if (action is null)
             {
-                PrintErrorMessage(INVALID_ACTION_MSG);
+                Writer.Error(INVALID_ACTION_MSG);
                 continue;
             }
 
@@ -46,24 +45,11 @@ public static class ActionExtensions
         }
     }
 
-    public static void PrintActions(User user)
-    {
-        //var mainMenuActions = MainMenuFactoryIfNotAdmin.CreateActions(user);
-        //mainMenuActions.PrintActionsAndOpen();
-    }
-
     public static void PrintActions(IList<IAction> actions)
     {
         foreach (var action in actions)
         {
             Console.WriteLine($"{action.MenuIndex}. {action.Name}");
         }
-    }
-
-    private static void PrintErrorMessage(string message)
-    {
-        Console.WriteLine(message);
-        Thread.Sleep(1000);
-        Console.Clear();
     }
 }

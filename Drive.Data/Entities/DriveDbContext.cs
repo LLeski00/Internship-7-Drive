@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Drive.Data.Seeds;
+using File = Drive.Data.Entities.Models.File;
 
 namespace Drive.Data.Entities;
 
@@ -13,9 +14,30 @@ public class DriveDbContext : DbContext
     }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<File> Files => Set<File>();
+    public DbSet<Folder> Folders => Set<Folder>();
+    public DbSet<FolderFile> FolderFiles => Set<FolderFile>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Folder>()
+            .HasIndex(f => new { f.OwnerId, f.IsRoot })
+            .IsUnique()
+            .HasFilter("[IsRootFolder] = 1");
+
+        modelBuilder.Entity<FolderFile>()
+            .HasKey(ff => new { ff.FolderId, ff.FileId });
+
+        modelBuilder.Entity<FolderFile>()
+            .HasOne(fi => fi.File)
+            .WithMany(fi => fi.Folders)
+            .HasForeignKey(ff => ff.FileId);
+
+        modelBuilder.Entity<FolderFile>()
+            .HasOne(fo => fo.Folder)
+            .WithMany(fo => fo.Files)
+            .HasForeignKey(ff => ff.FolderId);
+
         DatabaseSeeder.Seed(modelBuilder);
         base.OnModelCreating(modelBuilder);
     }
