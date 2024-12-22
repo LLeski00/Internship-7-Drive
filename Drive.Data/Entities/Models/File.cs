@@ -9,8 +9,8 @@
             Content = content;
             Size = size;
             OwnerId = ownerId;
-            CreatedOn = DateTime.Now;
-            LastChanged = DateTime.Now;
+            CreatedOn = DateTime.UtcNow;
+            LastChanged = DateTime.UtcNow;
         }
 
         public int Id { get; set; }
@@ -24,6 +24,6 @@
         public int OwnerId { get; set; }
         public User? Owner { get; set; }
 
-        public ICollection<FolderFile> Folders { get; set; } = new List<FolderFile>();
+        public ICollection<FolderFile> FolderFiles { get; set; } = new List<FolderFile>();
     }
 }

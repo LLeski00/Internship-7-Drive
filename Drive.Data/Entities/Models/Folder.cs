@@ -23,10 +23,10 @@
 
         public int OwnerId { get; set; }
         public User? Owner { get; set; }
-        public int ParentFolderId { get; set; }
+        public int? ParentFolderId { get; set; }
         public Folder? ParentFolder { get; set; }
 
-        public ICollection<FolderFile> Files { get; set; } = new List<FolderFile>();
+        public ICollection<FolderFile> FolderFiles { get; set; } = new List<FolderFile>();
         public ICollection<Folder> Subfolders { get; set; } = new List<Folder>();
     }
 }

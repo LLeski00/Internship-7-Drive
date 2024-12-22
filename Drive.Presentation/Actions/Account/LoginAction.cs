@@ -31,13 +31,15 @@ namespace Drive.Presentation.Actions.Account
 
             Console.WriteLine("Successfully logged in.");
             Console.ReadLine();
+            Console.WriteLine("Loading disk...");
+            DiskExtensions.LoadUsersDisk(user);
             UserExtensions.PrintUserActions(user);
         }
 
         public User? FindUser()
         {
             Console.Clear();
-            Reader.TryReadLine("Enter your email", out string email); //TryReadEmail
+            Reader.TryReadLine("Enter your email", out string email);
             Reader.TryReadLine("Enter your password", out string password);
 
             User? user = _userRepository.GetByEmailAndPassword(email, password);

@@ -14,7 +14,7 @@ public class MainMenuFactory
     {
         var actions = new List<IAction>
         {
-            new MyDiskAction(RepositoryFactory.Create<UserRepository>(), user),
+            new MyDiskAction(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), user),
             //new SharedAction(RepositoryFactory.Create<UserRepository>()),
             //new ProfileSettingsAction(RepositoryFactory.Create<UserRepository>()),
             //new LogoutAction(RepositoryFactory.Create<UserRepository>()),

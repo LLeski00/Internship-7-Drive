@@ -14,7 +14,7 @@ public class LoginMenuFactory
         var actions = new List<IAction>
         {
             new LoginAction(RepositoryFactory.Create<UserRepository>()),
-            new SignupAction(RepositoryFactory.Create<UserRepository>()),
+            new SignupAction(RepositoryFactory.Create<UserRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new ExitMenuAction(),
         };
 

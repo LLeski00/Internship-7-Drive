@@ -11,11 +11,13 @@ namespace Drive.Presentation.Actions.Account
     {
         public string Name { get; set; } = "Sign up";
         private readonly UserRepository _userRepository;
+        private readonly FolderRepository _folderRepository;
         public int MenuIndex { get; set; }
 
-        public SignupAction(UserRepository userRepository)
+        public SignupAction(UserRepository userRepository, FolderRepository folderRepository)
         {
             _userRepository = userRepository;
+            _folderRepository = folderRepository;
         }
         public void Open()
         {
@@ -77,6 +79,17 @@ namespace Drive.Presentation.Actions.Account
             }
 
             Console.WriteLine("The user was successfully added!");
+
+            var rootFolder = new Folder("root", newUser.Id);
+            responseResult = _folderRepository.Add(rootFolder);
+
+            if (responseResult != ResponseResultType.Success)
+            {
+                Writer.Error("ERROR: There was an issue with adding the users root folder!");
+                return;
+            }
+
+            Console.WriteLine("The users root folder was successfully added!");
             Console.ReadLine();
         }
     }

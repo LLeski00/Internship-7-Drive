@@ -23,20 +23,34 @@ public class DriveDbContext : DbContext
         modelBuilder.Entity<Folder>()
             .HasIndex(f => new { f.OwnerId, f.IsRoot })
             .IsUnique()
-            .HasFilter("[IsRootFolder] = 1");
+            .HasFilter("\"IsRoot\" = TRUE");
 
         modelBuilder.Entity<FolderFile>()
             .HasKey(ff => new { ff.FolderId, ff.FileId });
 
         modelBuilder.Entity<FolderFile>()
             .HasOne(fi => fi.File)
-            .WithMany(fi => fi.Folders)
+            .WithMany(fi => fi.FolderFiles)
             .HasForeignKey(ff => ff.FileId);
 
         modelBuilder.Entity<FolderFile>()
             .HasOne(fo => fo.Folder)
-            .WithMany(fo => fo.Files)
+            .WithMany(fo => fo.FolderFiles)
             .HasForeignKey(ff => ff.FolderId);
+
+        modelBuilder.Entity<File>()
+            .Property(f => f.CreatedOn)
+            .HasConversion(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+            );
+
+        modelBuilder.Entity<File>()
+            .Property(f => f.LastChanged)
+            .HasConversion(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+            );
 
         DatabaseSeeder.Seed(modelBuilder);
         base.OnModelCreating(modelBuilder);

@@ -14,6 +14,7 @@ public static class ActionExtensions
         var isExitSelected = false;
         do
         {
+            Console.Clear();
             PrintActions(actions);
 
             var isValidInput = int.TryParse(Console.ReadLine(), out var actionIndex);
