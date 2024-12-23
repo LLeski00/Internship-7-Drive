@@ -1,5 +1,6 @@
 ﻿using Drive.Presentation.Abstractions;
 using Drive.Presentation.Actions;
+using Drive.Presentation.Actions.Account;
 using Drive.Presentation.Helpers;
 
 namespace Drive.Presentation.Extensions;
@@ -33,7 +34,7 @@ public static class ActionExtensions
 
             action.Open();
 
-            isExitSelected = action is ExitMenuAction;
+            isExitSelected = action is ExitMenuAction || action is LogoutAction;
         } while (!isExitSelected);
     }
 

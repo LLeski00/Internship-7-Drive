@@ -1,8 +1,7 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Presentation.Abstractions;
 using Drive.Presentation.Extensions;
-using Drive.Domain.Repositories;
-using Drive.Presentation.Helpers;
+using File = Drive.Data.Entities.Models.File;
 
 namespace Drive.Presentation.Commands
 {
@@ -15,7 +14,7 @@ namespace Drive.Presentation.Commands
         {
         }
 
-        public void Execute()
+        public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
         {
             Console.WriteLine("All commands:");
             CommandExtensions.PrintAllCommands();

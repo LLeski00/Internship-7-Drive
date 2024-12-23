@@ -1,7 +1,10 @@
-﻿using Drive.Domain.Enums;
+﻿using Drive.Data.Entities.Models;
+using Drive.Domain.Enums;
 using Drive.Presentation.Abstractions;
 using Drive.Presentation.Factories;
 using Drive.Presentation.Helpers;
+using System.Collections.Generic;
+using File = Drive.Data.Entities.Models.File;
 
 namespace Drive.Presentation.Extensions;
 
@@ -26,7 +29,7 @@ public static class CommandExtensions
         PrintCommands(allCommands);
     }
 
-    public static void Execute(this Command? command)
+    public static void Execute(this Command? command, ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
     {
         var allCommands = CommandFactory.CreateCommands();
         var commandToBeExecuted = allCommands.FirstOrDefault(c => c.Name == command.ToString());
@@ -37,7 +40,7 @@ public static class CommandExtensions
             return;
         }
 
-        commandToBeExecuted.Execute();
+        commandToBeExecuted.Execute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments);
     }
 
     public static Command? GetCommandFromString(string? command)

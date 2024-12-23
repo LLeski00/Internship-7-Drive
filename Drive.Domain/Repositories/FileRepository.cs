@@ -87,6 +87,15 @@ public class FileRepository : BaseRepository
         return filesInFolder;
     }
 
+    public ICollection<File> GetByParent(int currentFolderId)
+    {
+        var filesInFolder = DbContext.Files
+        .Where(f => f.FolderFiles.Any(ff => ff.FolderId == currentFolderId))
+        .ToList();
+
+        return filesInFolder;
+    }
+
     public void LoadUsersFiles(User user)
     {
         var userFiles = GetAllByUser(user);

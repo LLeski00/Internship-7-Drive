@@ -85,6 +85,15 @@ public class FolderRepository : BaseRepository
         return foldersInFolder;
     }
 
+    public ICollection<Folder> GetByParent(int currentFolderId)
+    {
+        var foldersInFolder = DbContext.Folders
+            .Where(f => f.ParentFolderId == currentFolderId)
+            .ToList();
+
+        return foldersInFolder;
+    }
+
     public Folder? GetUsersRoot(User user)
     {
         if (user == null)

@@ -23,7 +23,7 @@ public static class DiskExtensions
 
     public static void PrintFile(File file)
     {
-        Console.WriteLine($"{file.Name}\tLast changed: {file.LastChanged}");
+        Console.WriteLine($"{file.Name}.{file.Extension}\tLast changed: {file.LastChanged}");
     }
 
     public static void PrintFolders(ICollection<Folder> folders)
