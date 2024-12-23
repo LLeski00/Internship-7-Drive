@@ -1,4 +1,6 @@
-﻿namespace Drive.Presentation.Helpers;
+﻿using Drive.Data.Entities.Models;
+
+namespace Drive.Presentation.Helpers;
 
 public static class Reader
 {
@@ -101,9 +103,9 @@ public static class Reader
         return true;
     }
 
-    public static void ReadInput(string message, out string input)
+    public static void ReadCommand(Folder currentDirectory, out string input)
     {
-        Console.WriteLine(message);
+        Console.Write($"[{currentDirectory.Name}] >> ");
         input = Console.ReadLine() ?? string.Empty;
     }
 

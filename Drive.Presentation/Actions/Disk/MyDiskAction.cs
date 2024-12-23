@@ -3,6 +3,7 @@ using Drive.Presentation.Abstractions;
 using Drive.Presentation.Extensions;
 using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
+using Drive.Presentation.Factories;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -11,6 +12,8 @@ namespace Drive.Presentation.Actions.Disk
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
         public User User { get; set; }
+        public Folder? Root {  get; set; }
+
         public string Name { get; set; } = "My disk";
         public int MenuIndex { get; set; }
 
@@ -19,24 +22,36 @@ namespace Drive.Presentation.Actions.Disk
             _fileRepository = fileRepository;
             _folderRepository = folderRepository;
             User = user;
+            Root = _folderRepository.GetUsersRoot(User);
         }
 
         public void Open()
         {
-            var root = _folderRepository.GetUsersRoot(User);
-
-            if (root == null)
+            if (Root == null)
             {
                 Writer.Error("Error while fetching users root folder.");
                 return;
             }
 
-            var currentFolders = _folderRepository.GetByUser(User, root.Id);
-            var currentFiles = _fileRepository.GetByUser(User, root.Id);
-
             Console.Clear();
+            var currentDirectory = Root;
+            var currentFolders = _folderRepository.GetByUser(User, currentDirectory.Id);
+            var currentFiles = _fileRepository.GetByUser(User, currentDirectory.Id);
             DiskExtensions.PrintDirectory(currentFolders, currentFiles);
-            Console.ReadLine();
+
+            do
+            {
+                Reader.ReadCommand(currentDirectory, out var userInput);
+                var command = CommandExtensions.GetCommandFromString(userInput);
+
+                if (command == null)
+                {
+                    Writer.Error("Invalid command. Use 'help' for a list of commands.");
+                    continue;
+                }
+
+                command.Execute();
+            } while (true);
         }
     }
 }
