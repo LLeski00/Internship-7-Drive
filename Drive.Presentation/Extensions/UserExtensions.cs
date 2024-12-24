@@ -10,4 +10,15 @@ public static class UserExtensions
         var mainMenuActions = MainMenuFactory.CreateActions(user);
         mainMenuActions.PrintActionsAndOpen();
     }
+
+    public static bool ConfirmUserAction(string message)
+    {
+        Console.WriteLine($"{message} (to confirm press 'y')");
+        var confirmChoice = Console.ReadLine();
+
+        if (string.IsNullOrEmpty(confirmChoice) || confirmChoice.ToLower() != "y")
+            return false;
+
+        return true;
+    }
 }

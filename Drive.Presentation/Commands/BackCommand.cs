@@ -9,7 +9,7 @@ namespace Drive.Presentation.Commands
     public class BackCommand : ICommand
     {
         public string Name { get; set; } = "back";
-        public string Description { get; set; } = "Goes back to parent folder";
+        public string Description { get; set; } = "Goes back to parent folder. Usage: back";
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
 
@@ -21,9 +21,9 @@ namespace Drive.Presentation.Commands
 
         public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
         {
-            if (!string.IsNullOrEmpty(commandArguments))
+            if (!IsCommandValid(commandArguments))
             {
-                Writer.Error($"Command {Name} should not have arguments.");
+                Writer.CommandError(Name, Description);
                 return;
             }
 
@@ -43,6 +43,16 @@ namespace Drive.Presentation.Commands
             currentDirectory = newCurrentDirectory;
             currentFolders = _folderRepository.GetByParent(currentDirectory.Id);
             currentFiles = _fileRepository.GetByParent(currentDirectory.Id);
+        }
+
+        public bool IsCommandValid(string? commandArguments)
+        {
+            if (!string.IsNullOrEmpty(commandArguments))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

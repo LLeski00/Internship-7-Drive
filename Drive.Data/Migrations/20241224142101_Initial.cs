@@ -38,7 +38,7 @@ namespace Drive.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Extension = table.Column<string>(type: "text", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: true),
                     Size = table.Column<long>(type: "bigint", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastChanged = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -116,11 +116,11 @@ namespace Drive.Data.Migrations
                 columns: new[] { "Id", "Content", "CreatedOn", "Extension", "LastChanged", "Name", "OwnerId", "Size" },
                 values: new object[,]
                 {
-                    { 1, "Some random text.", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4347), "txt", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4348), "TodoList", 1, 20L },
-                    { 2, "Some random text.", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4351), "txt", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4352), "TodoList2", 1, 20L },
-                    { 3, "Some random text.", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4353), "txt", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4354), "TodoList3", 1, 20L },
-                    { 4, "Some random text.", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4354), "txt", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4355), "TodoList4", 1, 20L },
-                    { 5, "Some random text.", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4356), "txt", new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4356), "TodoList5", 1, 20L }
+                    { 1, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(237), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(238), "TodoList", 1, 20L },
+                    { 2, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(241), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(242), "TodoList2", 1, 20L },
+                    { 3, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(243), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(244), "TodoList3", 1, 20L },
+                    { 4, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(245), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(245), "TodoList4", 1, 20L },
+                    { 5, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(246), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(246), "TodoList5", 1, 20L }
                 });
 
             migrationBuilder.InsertData(

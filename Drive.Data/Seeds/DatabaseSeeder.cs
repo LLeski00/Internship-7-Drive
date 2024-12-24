@@ -62,31 +62,11 @@ public static class DatabaseSeeder
         builder.Entity<FolderFile>()
             .HasData(new List<FolderFile>
             {
-                new FolderFile
-                {
-                    FolderId = 1,
-                    FileId = 1,
-                },
-                new FolderFile
-                {
-                    FolderId = 2,
-                    FileId = 2,
-                },
-                new FolderFile
-                {
-                    FolderId = 3,
-                    FileId = 3,
-                },
-                new FolderFile
-                {
-                    FolderId = 1,
-                    FileId = 4,
-                },
-                new FolderFile
-                {
-                    FolderId = 1,
-                    FileId = 5,
-                },
+                new FolderFile(1, 1),
+                new FolderFile(2, 2),
+                new FolderFile(3, 3),
+                new FolderFile(1, 4),
+                new FolderFile(1, 5),
             });
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Drive.Data.Entities.Models;
+using System.Xml.Linq;
 
 namespace Drive.Presentation.Helpers;
 
@@ -18,6 +19,11 @@ public class Writer
         Console.WriteLine(message);
         Thread.Sleep(1000);
         Console.Clear();
+    }
+
+    public static void CommandError(string name, string description)
+    {
+        Console.WriteLine($"Invalid use of {name}\n\tDescription: {description}\n");
     }
 
     public static string GenerateRandomCaptcha()

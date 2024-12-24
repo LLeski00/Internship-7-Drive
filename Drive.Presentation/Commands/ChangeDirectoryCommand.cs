@@ -9,7 +9,7 @@ namespace Drive.Presentation.Commands
     public class ChangeDirectoryCommand : ICommand
     {
         public string Name { get; set; } = "cd";
-        public string Description { get; set; } = "Changes current directory. Usage: cd 'path' ";
+        public string Description { get; set; } = "Changes current directory. Usage: cd 'path'";
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
 
@@ -21,9 +21,9 @@ namespace Drive.Presentation.Commands
 
         public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
         {
-            if (commandArguments == null || commandArguments.Split(' ').Length > 1)
+            if (!IsCommandValid(commandArguments))
             {
-                Writer.Error($"Invalid use of {Name}\nDescription: {Description}");
+                Writer.CommandError(Name, Description);
                 return;
             }
 
@@ -38,6 +38,16 @@ namespace Drive.Presentation.Commands
             currentDirectory = folderToEnter;
             currentFolders = _folderRepository.GetByParent(currentDirectory.Id);
             currentFiles = _fileRepository.GetByParent(currentDirectory.Id);
+        }
+
+        public bool IsCommandValid(string? commandArguments)
+        {
+            if (string.IsNullOrEmpty(commandArguments) || commandArguments.Split(' ').Length != 1)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

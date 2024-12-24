@@ -56,4 +56,41 @@ public static class DiskExtensions
         PrintFolders(folders);
         PrintFiles(files);
     }
+
+    public static bool IsFileNameValid(string file)
+    {
+        var fileSplitByDot = file.Split('.');
+
+        if (fileSplitByDot.Length != 2 || fileSplitByDot[0].Length == 0 || fileSplitByDot[1].Length == 0)
+            return false;
+
+        return true;
+    }
+
+    public static bool IsFolderNameValid(string folderName)
+    {
+        if (string.IsNullOrEmpty(folderName) || folderName.Split('.').Length != 1)
+            return false;
+
+        return true;
+    }
+
+    public static string InputFileContent()
+    {
+        var linesOfText = new List<string>();
+
+        do
+        {
+            var line = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(line))
+                break;
+
+            linesOfText.Add(line);
+        } while (true);
+
+        var content = string.Join('\n', linesOfText);
+
+        return content;
+    }
 }

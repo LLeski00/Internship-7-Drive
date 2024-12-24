@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Drive.Data.Migrations
 {
     [DbContext(typeof(DriveDbContext))]
-    [Migration("20241222130408_Initial")]
+    [Migration("20241224142101_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -34,7 +34,6 @@ namespace Drive.Data.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedOn")
@@ -68,9 +67,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 1,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4347),
+                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(237),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4348),
+                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(238),
                             Name = "TodoList",
                             OwnerId = 1,
                             Size = 20L
@@ -79,9 +78,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 2,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4351),
+                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(241),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4352),
+                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(242),
                             Name = "TodoList2",
                             OwnerId = 1,
                             Size = 20L
@@ -90,9 +89,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 3,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4353),
+                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(243),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4354),
+                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(244),
                             Name = "TodoList3",
                             OwnerId = 1,
                             Size = 20L
@@ -101,9 +100,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 4,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4354),
+                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(245),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4355),
+                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(245),
                             Name = "TodoList4",
                             OwnerId = 1,
                             Size = 20L
@@ -112,9 +111,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 5,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4356),
+                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(246),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 22, 13, 4, 7, 782, DateTimeKind.Utc).AddTicks(4356),
+                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(246),
                             Name = "TodoList5",
                             OwnerId = 1,
                             Size = 20L

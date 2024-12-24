@@ -3,7 +3,6 @@ using Drive.Domain.Enums;
 using Drive.Presentation.Abstractions;
 using Drive.Presentation.Factories;
 using Drive.Presentation.Helpers;
-using System.Collections.Generic;
 using File = Drive.Data.Entities.Models.File;
 
 namespace Drive.Presentation.Extensions;
@@ -23,15 +22,15 @@ public static class CommandExtensions
         }
     }
 
-    public static void PrintAllCommands()
+    public static void PrintAllCommands(User user)
     {
-        var allCommands = CommandFactory.CreateCommands();
+        var allCommands = CommandFactory.CreateCommands(user);
         PrintCommands(allCommands);
     }
 
-    public static void Execute(this Command? command, ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
+    public static void Execute(this Command? command, ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments, User user)
     {
-        var allCommands = CommandFactory.CreateCommands();
+        var allCommands = CommandFactory.CreateCommands(user);
         var commandToBeExecuted = allCommands.FirstOrDefault(c => c.Name == command.ToString());
 
         if (commandToBeExecuted == null)
@@ -63,5 +62,27 @@ public static class CommandExtensions
         {
             Console.WriteLine($"- {command.Name}\t{command.Description}");
         }
+    }
+
+    public static void ProcessUserCommands(Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, User user)
+    {
+        do
+        {
+            DiskExtensions.PrintDirectory(currentFolders, currentFiles);
+            Reader.ReadCommand(currentDirectory, out var userInput);
+            var command = GetCommandFromString(userInput);
+
+            if (command == null)
+            {
+                Writer.Error("Invalid command. Use 'help' for a list of commands.");
+                continue;
+            }
+
+            if (userInput == Command.exit.ToString())
+                break;
+
+            var commandArguments = string.Join(' ', userInput.Split(' ').Skip(1));
+            command.Execute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments, user);
+        } while (true);
     }
 }
