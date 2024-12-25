@@ -37,12 +37,13 @@ namespace Drive.Presentation.Commands
             switch (deleteType)
             {
                 case "file":
-                    DeleteFile(commandArgumentsSplit[1], currentDirectory, ref currentFiles);
+                    DeleteFile(commandArgumentsSplit[1], ref currentFiles);
                     break;
                 case "folder":
-                    DeleteFolder(commandArgumentsSplit[1], currentDirectory, ref currentFolders);
+                    DeleteFolder(commandArgumentsSplit[1], ref currentFolders);
                     break;
                 default:
+                    Writer.CommandError(Name, Description);
                     break;
             }
         }
@@ -65,13 +66,13 @@ namespace Drive.Presentation.Commands
             return true;
         }
 
-        public void DeleteFile(string file, Folder parentFolder, ref ICollection<File> currentFiles)
+        public void DeleteFile(string file, ref ICollection<File> currentFiles)
         {
             var fileSplitByDot = file.Split('.');
             var fileName = fileSplitByDot[0];
             var fileExtension = fileSplitByDot[1];
 
-            var fileToDelete = currentFiles.FirstOrDefault(f => f.Name == fileName && f.Extension == fileExtension);
+            var fileToDelete = DiskExtensions.GetFileByName(currentFiles, fileName, fileExtension);
 
             if (fileToDelete == null)
             {
@@ -94,9 +95,9 @@ namespace Drive.Presentation.Commands
             Console.WriteLine("File successfully deleted.");
         }
 
-        public void DeleteFolder(string folderName, Folder parentFolder, ref ICollection<Folder> currentFolders)
+        public void DeleteFolder(string folderName, ref ICollection<Folder> currentFolders)
         {
-            var folderToDelete = currentFolders.FirstOrDefault(f => f.Name == folderName);
+            var folderToDelete = DiskExtensions.GetFolderByName(currentFolders, folderName);
 
             if (folderToDelete == null)
             {

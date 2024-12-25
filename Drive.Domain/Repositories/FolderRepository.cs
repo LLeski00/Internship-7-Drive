@@ -55,6 +55,20 @@ public class FolderRepository : BaseRepository
         return SaveChanges();
     }
 
+    public ResponseResultType Rename(string name, int id)
+    {
+        var folderToUpdate = DbContext.Folders.Find(id);
+
+        if (folderToUpdate is null)
+        {
+            return ResponseResultType.NotFound;
+        }
+
+        folderToUpdate.Name = name;
+
+        return SaveChanges();
+    }
+
     public Folder? GetById(int? id) => DbContext.Folders.FirstOrDefault(u => u.Id == id);
 
     public ICollection<Folder> GetAllByUser(User user)

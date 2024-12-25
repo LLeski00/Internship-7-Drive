@@ -47,6 +47,7 @@ namespace Drive.Presentation.Commands
                     CreateFolder(commandArgumentsSplit[1], currentDirectory, ref currentFolders);
                     break;
                 default:
+                    Writer.CommandError(Name, Description);
                     break;
             }
         }
@@ -75,7 +76,7 @@ namespace Drive.Presentation.Commands
             var fileName = fileSplitByDot[0];
             var fileExtension = fileSplitByDot[1];
 
-            if (currentFiles.Any(f => f.Name == fileName && f.Extension == fileExtension))
+            if (DiskExtensions.GetFileByName(currentFiles, fileName, fileExtension) != null)
             {
                 Writer.Error("File with that name and extension already exists in this folder!");
                 return;
@@ -85,7 +86,6 @@ namespace Drive.Presentation.Commands
                 return;
 
             var newFile = new File(fileName, fileExtension, User.Id);
-
             var fileResponse = _fileRepository.Add(newFile);
 
             if (fileResponse != ResponseResultType.Success)
@@ -109,7 +109,7 @@ namespace Drive.Presentation.Commands
 
         public void CreateFolder(string folderName, Folder parentFolder, ref ICollection<Folder> currentFolders)
         {
-            if (currentFolders.Any(f => f.Name == folderName))
+            if (DiskExtensions.GetFolderByName(currentFolders, folderName) != null)
             {
                 Writer.Error("Folder with that name already exists in this folder!");
                 return;

@@ -57,6 +57,22 @@ public class FileRepository : BaseRepository
         return SaveChanges();
     }
 
+    public ResponseResultType Rename(string fileName, string fileExtension, int id)
+    {
+        var fileToUpdate = DbContext.Files.Find(id);
+
+        if (fileToUpdate is null)
+        {
+            return ResponseResultType.NotFound;
+        }
+
+        fileToUpdate.Name = fileName;
+        fileToUpdate.Extension = fileExtension;
+        fileToUpdate.LastChanged = DateTime.UtcNow;
+
+        return SaveChanges();
+    }
+
     public File? GetById(int id) => DbContext.Files.FirstOrDefault(u => u.Id == id);
 
     public ICollection<File> GetAllByUser(User user)

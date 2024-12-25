@@ -1,6 +1,7 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Domain.Factories;
 using Drive.Domain.Repositories;
+using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
 namespace Drive.Presentation.Extensions;
@@ -92,5 +93,15 @@ public static class DiskExtensions
         var content = string.Join('\n', linesOfText);
 
         return content;
+    }
+
+    public static File? GetFileByName(ICollection<File> currentFiles, string fileName, string fileExtension)
+    {
+        return currentFiles.FirstOrDefault(f => f.Name == fileName && f.Extension == fileExtension);
+    }
+
+    public static Folder? GetFolderByName(ICollection<Folder> currentFolders, string folderName)
+    {
+        return currentFolders.FirstOrDefault(f => f.Name == folderName);
     }
 }
