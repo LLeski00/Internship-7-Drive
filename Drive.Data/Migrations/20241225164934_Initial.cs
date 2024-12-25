@@ -73,7 +73,8 @@ namespace Drive.Data.Migrations
                         name: "FK_Folders_Folders_ParentFolderId",
                         column: x => x.ParentFolderId,
                         principalTable: "Folders",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Folders_Users_OwnerId",
                         column: x => x.OwnerId,
@@ -116,11 +117,11 @@ namespace Drive.Data.Migrations
                 columns: new[] { "Id", "Content", "CreatedOn", "Extension", "LastChanged", "Name", "OwnerId", "Size" },
                 values: new object[,]
                 {
-                    { 1, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(237), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(238), "TodoList", 1, 20L },
-                    { 2, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(241), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(242), "TodoList2", 1, 20L },
-                    { 3, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(243), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(244), "TodoList3", 1, 20L },
-                    { 4, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(245), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(245), "TodoList4", 1, 20L },
-                    { 5, "Some random text.", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(246), "txt", new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(246), "TodoList5", 1, 20L }
+                    { 1, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4156), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4157), "TodoList", 1, 20L },
+                    { 2, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4160), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4160), "TodoList2", 1, 20L },
+                    { 3, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4161), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4162), "TodoList3", 1, 20L },
+                    { 4, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4163), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4163), "TodoList4", 1, 20L },
+                    { 5, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4164), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4165), "TodoList5", 1, 20L }
                 });
 
             migrationBuilder.InsertData(

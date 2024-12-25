@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Drive.Data.Migrations
 {
     [DbContext(typeof(DriveDbContext))]
-    [Migration("20241224142101_Initial")]
+    [Migration("20241225164934_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -67,9 +67,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 1,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(237),
+                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4156),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(238),
+                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4157),
                             Name = "TodoList",
                             OwnerId = 1,
                             Size = 20L
@@ -78,9 +78,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 2,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(241),
+                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4160),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(242),
+                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4160),
                             Name = "TodoList2",
                             OwnerId = 1,
                             Size = 20L
@@ -89,9 +89,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 3,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(243),
+                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4161),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(244),
+                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4162),
                             Name = "TodoList3",
                             OwnerId = 1,
                             Size = 20L
@@ -100,9 +100,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 4,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(245),
+                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4163),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(245),
+                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4163),
                             Name = "TodoList4",
                             OwnerId = 1,
                             Size = 20L
@@ -111,9 +111,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 5,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(246),
+                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4164),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 24, 14, 21, 1, 362, DateTimeKind.Utc).AddTicks(246),
+                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4165),
                             Name = "TodoList5",
                             OwnerId = 1,
                             Size = 20L
@@ -279,7 +279,8 @@ namespace Drive.Data.Migrations
 
                     b.HasOne("Drive.Data.Entities.Models.Folder", "ParentFolder")
                         .WithMany("Subfolders")
-                        .HasForeignKey("ParentFolderId");
+                        .HasForeignKey("ParentFolderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Owner");
 

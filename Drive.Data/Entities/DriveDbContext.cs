@@ -25,18 +25,26 @@ public class DriveDbContext : DbContext
             .IsUnique()
             .HasFilter("\"IsRoot\" = TRUE");
 
+        modelBuilder.Entity<Folder>()
+            .HasMany(f => f.Subfolders)
+            .WithOne(f => f.ParentFolder)
+            .HasForeignKey(f => f.ParentFolderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<FolderFile>()
             .HasKey(ff => new { ff.FolderId, ff.FileId });
 
         modelBuilder.Entity<FolderFile>()
             .HasOne(fi => fi.File)
             .WithMany(fi => fi.FolderFiles)
-            .HasForeignKey(ff => ff.FileId);
+            .HasForeignKey(ff => ff.FileId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<FolderFile>()
             .HasOne(fo => fo.Folder)
             .WithMany(fo => fo.FolderFiles)
-            .HasForeignKey(ff => ff.FolderId);
+            .HasForeignKey(ff => ff.FolderId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<File>()
             .Property(f => f.CreatedOn)

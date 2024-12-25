@@ -15,6 +15,7 @@ public class CommandFactory
             new HelpCommand(user),
             new ChangeDirectoryCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new CreateCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<FolderFileRepository>(), user),
+            new DeleteCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<FolderFileRepository>()),
             new BackCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new ExitCommand()
         };

@@ -8,23 +8,19 @@ using Drive.Domain.Enums;
 
 namespace Drive.Presentation.Commands
 {
-    public class CreateCommand : ICommand
+    public class DeleteCommand : ICommand
     {
-        public string Name { get; set; } = "create";
-        public string Description { get; set; } = "Creates a file or a folder in the current directory. Usage: create file 'name.extension' or create folder 'name'";
-        public User User { get; set; }
+        public string Name { get; set; } = "delete";
+        public string Description { get; set; } = "Deletes a file or a folder in the current directory. Usage: delete file 'name.extension' or delete folder 'name'";
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
         private readonly FolderFileRepository _folderFileRepository;
 
-        //NEEDS REFACTORING
-
-        public CreateCommand(FileRepository fileRepository, FolderRepository folderRepository, FolderFileRepository folderFileRepository, User user)
+        public DeleteCommand(FileRepository fileRepository, FolderRepository folderRepository, FolderFileRepository folderFileRepository)
         {
             _fileRepository = fileRepository;
             _folderRepository = folderRepository;
             _folderFileRepository = folderFileRepository;
-            User = user;
         }
 
         public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
@@ -36,15 +32,15 @@ namespace Drive.Presentation.Commands
             }
 
             var commandArgumentsSplit = commandArguments.Split(' ');
-            var createType = commandArgumentsSplit[0];
+            var deleteType = commandArgumentsSplit[0];
 
-            switch (createType)
+            switch (deleteType)
             {
                 case "file":
-                    CreateFile(commandArgumentsSplit[1], currentDirectory, ref currentFiles);
+                    DeleteFile(commandArgumentsSplit[1], currentDirectory, ref currentFiles);
                     break;
                 case "folder":
-                    CreateFolder(commandArgumentsSplit[1], currentDirectory, ref currentFolders);
+                    DeleteFolder(commandArgumentsSplit[1], currentDirectory, ref currentFolders);
                     break;
                 default:
                     break;
@@ -69,66 +65,58 @@ namespace Drive.Presentation.Commands
             return true;
         }
 
-        public void CreateFile(string file, Folder parentFolder, ref ICollection<File> currentFiles)
+        public void DeleteFile(string file, Folder parentFolder, ref ICollection<File> currentFiles)
         {
             var fileSplitByDot = file.Split('.');
             var fileName = fileSplitByDot[0];
             var fileExtension = fileSplitByDot[1];
 
-            if (currentFiles.Any(f => f.Name == fileName && f.Extension == fileExtension))
+            var fileToDelete = currentFiles.FirstOrDefault(f => f.Name == fileName && f.Extension == fileExtension);
+
+            if (fileToDelete == null)
             {
-                Writer.Error("File with that name and extension already exists in this folder!");
+                Writer.Error("File with that name doesn't exist in this folder!");
                 return;
             }
 
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to add this file?"))
+            if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this file?"))
                 return;
 
-            var newFile = new File(fileName, fileExtension, User.Id);
-
-            var fileResponse = _fileRepository.Add(newFile);
+            var fileResponse = _fileRepository.Delete(fileToDelete.Id);
 
             if (fileResponse != ResponseResultType.Success)
             {
-                Writer.Error("ERROR: Something went wrong with adding the file.");
+                Writer.Error("ERROR: Something went wrong with deleting the file.");
                 return;
             }
 
-            var newFolderFile = new FolderFile(parentFolder.Id, newFile.Id);
-            var folderFileResponse = _folderFileRepository.Add(newFolderFile);
-
-            if (folderFileResponse != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with adding the file.");
-                _fileRepository.Delete(newFile.Id);
-            }
-
-            currentFiles.Add(newFile);
-            Console.WriteLine("File successfully added.");
+            currentFiles.Remove(fileToDelete);
+            Console.WriteLine("File successfully deleted.");
         }
 
-        public void CreateFolder(string folderName, Folder parentFolder, ref ICollection<Folder> currentFolders)
+        public void DeleteFolder(string folderName, Folder parentFolder, ref ICollection<Folder> currentFolders)
         {
-            if (currentFolders.Any(f => f.Name == folderName))
+            var folderToDelete = currentFolders.FirstOrDefault(f => f.Name == folderName);
+
+            if (folderToDelete == null)
             {
-                Writer.Error("Folder with that name already exists in this folder!");
+                Writer.Error("Folder with that name doesn't exists in this folder!");
                 return;
             }
 
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to add this folder?"))
+            if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this folder?"))
                 return;
 
-            var newFolder = new Folder(folderName, User.Id, parentFolder.Id);
-            var response = _folderRepository.Add(newFolder);
+            var response = _folderRepository.Delete(folderToDelete.Id);
 
             if (response != ResponseResultType.Success)
             {
-                Writer.Error("ERROR: Something went wrong with adding the folder.");
+                Writer.Error("ERROR: Something went wrong with deleting the folder.");
                 return;
             }
 
-            currentFolders.Add(newFolder);
-            Console.WriteLine("Folder successfully added.");
+            currentFolders.Remove(folderToDelete);
+            Console.WriteLine("Folder successfully deleted.");
         }
     }
 }
