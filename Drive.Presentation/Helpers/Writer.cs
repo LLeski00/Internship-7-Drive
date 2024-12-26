@@ -1,5 +1,4 @@
 ﻿using Drive.Data.Entities.Models;
-using System.Xml.Linq;
 
 namespace Drive.Presentation.Helpers;
 
@@ -31,5 +30,13 @@ public class Writer
         var randomString = Guid.NewGuid().ToString("N").Substring(0, 5);
         
         return randomString;
+    }
+
+    public static void PrintLines(List<string> lines)
+    {
+        foreach (var line in lines)
+        {
+            Console.WriteLine(line);
+        }
     }
 }

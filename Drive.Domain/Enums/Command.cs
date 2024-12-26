@@ -7,6 +7,7 @@ public enum Command
     cd,
     delete,
     rename,
+    edit,
     back,
     exit
 }

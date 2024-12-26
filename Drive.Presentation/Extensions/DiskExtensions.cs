@@ -76,25 +76,7 @@ public static class DiskExtensions
         return true;
     }
 
-    public static string InputFileContent()
-    {
-        var linesOfText = new List<string>();
-
-        do
-        {
-            var line = Console.ReadLine();
-
-            if (string.IsNullOrEmpty(line))
-                break;
-
-            linesOfText.Add(line);
-        } while (true);
-
-        var content = string.Join('\n', linesOfText);
-
-        return content;
-    }
-
+    //Possibly unnecessary
     public static File? GetFileByName(ICollection<File> currentFiles, string fileName, string fileExtension)
     {
         return currentFiles.FirstOrDefault(f => f.Name == fileName && f.Extension == fileExtension);

@@ -73,6 +73,27 @@ public class FileRepository : BaseRepository
         return SaveChanges();
     }
 
+    public ResponseResultType EditContent(string? content, int id)
+    {
+        var fileToUpdate = DbContext.Files.Find(id);
+
+        if (fileToUpdate is null)
+        {
+            return ResponseResultType.NotFound;
+        }
+
+        fileToUpdate.Content = content;
+
+        if (content == null)
+            fileToUpdate.Size = 0;
+        else
+            fileToUpdate.Size = content.Length;
+
+        fileToUpdate.LastChanged = DateTime.UtcNow;
+
+        return SaveChanges();
+    }
+
     public File? GetById(int id) => DbContext.Files.FirstOrDefault(u => u.Id == id);
 
     public ICollection<File> GetAllByUser(User user)

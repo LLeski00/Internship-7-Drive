@@ -17,6 +17,7 @@ public class CommandFactory
             new CreateCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<FolderFileRepository>(), user),
             new DeleteCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<FolderFileRepository>()),
             new RenameCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<FolderFileRepository>()),
+            new EditCommand(RepositoryFactory.Create<FileRepository>()),
             new BackCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new ExitCommand()
         };

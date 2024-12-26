@@ -109,6 +109,7 @@ public static class Reader
         input = Console.ReadLine() ?? string.Empty;
     }
 
+    //Change name
     public static bool DoYouWantToContinue()
     {
         Console.WriteLine("If you want to go back to previous page press y");
@@ -116,5 +117,17 @@ public static class Reader
         if (input == "y")
             return false;
         return true;
+    }
+
+    public static List<string> GetLinesFromString(string? input)
+    {
+        var lines = new List<string>();
+
+        if (input == null)
+            return lines;
+
+        lines = input.Split('\n').ToList();
+
+        return lines;
     }
 }
