@@ -5,6 +5,7 @@ using Drive.Presentation.Helpers;
 using Drive.Presentation.Extensions;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Domain.Enums;
+using Drive.Presentation.Actions.Disk;
 
 namespace Drive.Presentation.Commands
 {
@@ -14,13 +15,11 @@ namespace Drive.Presentation.Commands
         public string Description { get; set; } = "Changes the name of the file or folder in the current directory. Usage: rename file 'name.extension' 'newName.newExtension' or rename folder 'name' 'name'";
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
-        private readonly FolderFileRepository _folderFileRepository;
 
-        public RenameCommand(FileRepository fileRepository, FolderRepository folderRepository, FolderFileRepository folderFileRepository)
+        public RenameCommand(FileRepository fileRepository, FolderRepository folderRepository)
         {
             _fileRepository = fileRepository;
             _folderRepository = folderRepository;
-            _folderFileRepository = folderFileRepository;
         }
 
         public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
@@ -37,10 +36,12 @@ namespace Drive.Presentation.Commands
             switch (renameType)
             {
                 case "file":
-                    RenameFile(commandArgumentsSplit[1], commandArgumentsSplit[2], ref currentFiles);
+                    var fileRenameAction = new FileRenameAction(_fileRepository, commandArgumentsSplit[1], commandArgumentsSplit[2], currentFiles);
+                    fileRenameAction.Open();
                     break;
                 case "folder":
-                    RenameFolder(commandArgumentsSplit[1], commandArgumentsSplit[2], ref currentFolders);
+                    var folderRenameAction = new FolderRenameAction(_folderRepository, commandArgumentsSplit[1], commandArgumentsSplit[2], currentFolders);
+                    folderRenameAction.Open();
                     break;
                 default:
                     Writer.CommandError(Name, Description);
@@ -64,83 +65,6 @@ namespace Drive.Presentation.Commands
                 return false;
 
             return true;
-        }
-
-        public void RenameFile(string file, string newFile, ref ICollection<File> currentFiles)
-        {
-            var fileSplitByDot = file.Split('.');
-            var fileName = fileSplitByDot[0];
-            var fileExtension = fileSplitByDot[1];
-
-            var updatedFileSplitByDot = newFile.Split('.');
-            var updatedFileName = updatedFileSplitByDot[0];
-            var updatedFileExtension = updatedFileSplitByDot[1];
-
-            var fileToUpdate = DiskExtensions.GetFileByName(currentFiles, fileName, fileExtension);
-
-            if (fileToUpdate == null)
-            {
-                Writer.Error("File with that name doesn't exists in this folder!");
-                return;
-            }
-
-            var updatedFile = DiskExtensions.GetFileByName(currentFiles, updatedFileName, updatedFileExtension);
-
-            if (updatedFile != null)
-            {
-                Writer.Error("File with that name already exists in this folder!");
-                return;
-            }
-
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to rename this file?"))
-                return;
-
-            var fileResponse = _fileRepository.Rename(updatedFileName, updatedFileExtension, fileToUpdate.Id);
-
-            if (fileResponse != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with renaming the file.");
-                return;
-            }
-
-            fileToUpdate.Name = updatedFileName;
-            fileToUpdate.Extension = updatedFileExtension;
-
-            Console.WriteLine("File successfully renamed.");
-        }
-
-        public void RenameFolder(string folderName, string newFolderName, ref ICollection<Folder> currentFolders)
-        {
-            var folderToUpdate = DiskExtensions.GetFolderByName(currentFolders, folderName);
-
-            if (folderToUpdate == null)
-            {
-                Writer.Error("Folder with that name doesn't exists in this folder!");
-                return;
-            }
-
-            var updatedFolder = DiskExtensions.GetFolderByName(currentFolders, newFolderName);
-
-            if (updatedFolder != null)
-            {
-                Writer.Error("Folder with that name already exists in this folder!");
-                return;
-            }
-
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to rename this folder?"))
-                return;
-
-            var response = _folderRepository.Rename(newFolderName, folderToUpdate.Id);
-
-            if (response != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with renaming the folder.");
-                return;
-            }
-
-            folderToUpdate.Name = newFolderName;
-
-            Console.WriteLine("Folder successfully renamed.");
         }
     }
 }

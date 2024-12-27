@@ -5,6 +5,7 @@ using Drive.Presentation.Helpers;
 using Drive.Presentation.Extensions;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Domain.Enums;
+using Drive.Presentation.Actions.Disk;
 
 namespace Drive.Presentation.Commands
 {
@@ -37,10 +38,12 @@ namespace Drive.Presentation.Commands
             switch (deleteType)
             {
                 case "file":
-                    DeleteFile(commandArgumentsSplit[1], ref currentFiles);
+                    var fileDeleteAction = new FileDeleteAction(_fileRepository, commandArgumentsSplit[1], currentFiles);
+                    fileDeleteAction.Open();
                     break;
                 case "folder":
-                    DeleteFolder(commandArgumentsSplit[1], ref currentFolders);
+                    var folderDeleteAction = new FolderDeleteAction(_folderRepository, commandArgumentsSplit[1], currentFolders);
+                    folderDeleteAction.Open();
                     break;
                 default:
                     Writer.CommandError(Name, Description);
@@ -64,60 +67,6 @@ namespace Drive.Presentation.Commands
                 return false;
 
             return true;
-        }
-
-        public void DeleteFile(string file, ref ICollection<File> currentFiles)
-        {
-            var fileSplitByDot = file.Split('.');
-            var fileName = fileSplitByDot[0];
-            var fileExtension = fileSplitByDot[1];
-
-            var fileToDelete = DiskExtensions.GetFileByName(currentFiles, fileName, fileExtension);
-
-            if (fileToDelete == null)
-            {
-                Writer.Error("File with that name doesn't exist in this folder!");
-                return;
-            }
-
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this file?"))
-                return;
-
-            var fileResponse = _fileRepository.Delete(fileToDelete.Id);
-
-            if (fileResponse != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with deleting the file.");
-                return;
-            }
-
-            currentFiles.Remove(fileToDelete);
-            Console.WriteLine("File successfully deleted.");
-        }
-
-        public void DeleteFolder(string folderName, ref ICollection<Folder> currentFolders)
-        {
-            var folderToDelete = DiskExtensions.GetFolderByName(currentFolders, folderName);
-
-            if (folderToDelete == null)
-            {
-                Writer.Error("Folder with that name doesn't exists in this folder!");
-                return;
-            }
-
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this folder?"))
-                return;
-
-            var response = _folderRepository.Delete(folderToDelete.Id);
-
-            if (response != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with deleting the folder.");
-                return;
-            }
-
-            currentFolders.Remove(folderToDelete);
-            Console.WriteLine("Folder successfully deleted.");
         }
     }
 }

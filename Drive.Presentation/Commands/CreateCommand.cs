@@ -5,6 +5,7 @@ using Drive.Presentation.Helpers;
 using Drive.Presentation.Extensions;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Domain.Enums;
+using Drive.Presentation.Actions.Disk;
 
 namespace Drive.Presentation.Commands
 {
@@ -16,8 +17,6 @@ namespace Drive.Presentation.Commands
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
         private readonly FolderFileRepository _folderFileRepository;
-
-        //NEEDS REFACTORING
 
         public CreateCommand(FileRepository fileRepository, FolderRepository folderRepository, FolderFileRepository folderFileRepository, User user)
         {
@@ -41,10 +40,12 @@ namespace Drive.Presentation.Commands
             switch (createType)
             {
                 case "file":
-                    CreateFile(commandArgumentsSplit[1], currentDirectory, ref currentFiles);
+                    var fileAddAction = new FileAddAction(_fileRepository, _folderFileRepository, commandArgumentsSplit[1], currentDirectory, currentFiles, User);
+                    fileAddAction.Open();
                     break;
                 case "folder":
-                    CreateFolder(commandArgumentsSplit[1], currentDirectory, ref currentFolders);
+                    var folderAddAction = new FolderAddAction(_folderRepository, commandArgumentsSplit[1], currentDirectory, currentFolders, User);
+                    folderAddAction.Open();
                     break;
                 default:
                     Writer.CommandError(Name, Description);
@@ -68,67 +69,6 @@ namespace Drive.Presentation.Commands
                 return false;
 
             return true;
-        }
-
-        public void CreateFile(string file, Folder parentFolder, ref ICollection<File> currentFiles)
-        {
-            var fileSplitByDot = file.Split('.');
-            var fileName = fileSplitByDot[0];
-            var fileExtension = fileSplitByDot[1];
-
-            if (DiskExtensions.GetFileByName(currentFiles, fileName, fileExtension) != null)
-            {
-                Writer.Error("File with that name and extension already exists in this folder!");
-                return;
-            }
-
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to add this file?"))
-                return;
-
-            var newFile = new File(fileName, fileExtension, User.Id);
-            var fileResponse = _fileRepository.Add(newFile);
-
-            if (fileResponse != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with adding the file.");
-                return;
-            }
-
-            var newFolderFile = new FolderFile(parentFolder.Id, newFile.Id);
-            var folderFileResponse = _folderFileRepository.Add(newFolderFile);
-
-            if (folderFileResponse != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with adding the file.");
-                _fileRepository.Delete(newFile.Id);
-            }
-
-            currentFiles.Add(newFile);
-            Console.WriteLine("File successfully added.");
-        }
-
-        public void CreateFolder(string folderName, Folder parentFolder, ref ICollection<Folder> currentFolders)
-        {
-            if (DiskExtensions.GetFolderByName(currentFolders, folderName) != null)
-            {
-                Writer.Error("Folder with that name already exists in this folder!");
-                return;
-            }
-
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to add this folder?"))
-                return;
-
-            var newFolder = new Folder(folderName, User.Id, parentFolder.Id);
-            var response = _folderRepository.Add(newFolder);
-
-            if (response != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with adding the folder.");
-                return;
-            }
-
-            currentFolders.Add(newFolder);
-            Console.WriteLine("Folder successfully added.");
         }
     }
 }
