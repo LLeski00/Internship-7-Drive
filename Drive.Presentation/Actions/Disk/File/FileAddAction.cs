@@ -13,14 +13,14 @@ namespace Drive.Presentation.Actions.Disk
         private readonly FileRepository _fileRepository;
         private readonly FolderFileRepository _folderFileRepository;
         public string FileToAdd { get; set; }
-        public Data.Entities.Models.Folder ParentFolder { get; set; }
-        public ICollection<Data.Entities.Models.File> CurrentFiles { get; set; }
+        public Folder ParentFolder { get; set; }
+        public ICollection<File> CurrentFiles { get; set; }
         public User User { get; set; }
 
         public string Name { get; set; } = "Add file";
         public int MenuIndex { get; set; }
 
-        public FileAddAction(FileRepository fileRepository, FolderFileRepository folderFileRepository, string fileToAdd, Data.Entities.Models.Folder parentFolder, ICollection<Data.Entities.Models.File> currentFiles, User user)
+        public FileAddAction(FileRepository fileRepository, FolderFileRepository folderFileRepository, string fileToAdd, Folder parentFolder, ICollection<File> currentFiles, User user)
         {
             _fileRepository = fileRepository;
             _folderFileRepository = folderFileRepository;
@@ -45,7 +45,7 @@ namespace Drive.Presentation.Actions.Disk
             if (!UserExtensions.ConfirmUserAction("Are you sure you want to add this file?"))
                 return;
 
-            var newFile = new Data.Entities.Models.File(fileName, fileExtension, User.Id);
+            var newFile = new File(fileName, fileExtension, User.Id);
             var fileResponse = _fileRepository.Add(newFile);
 
             if (fileResponse != ResponseResultType.Success)
@@ -61,6 +61,7 @@ namespace Drive.Presentation.Actions.Disk
             {
                 Writer.Error("ERROR: Something went wrong with adding the file.");
                 _fileRepository.Delete(newFile.Id);
+                return;
             }
 
             CurrentFiles.Add(newFile);

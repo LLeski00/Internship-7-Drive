@@ -1,6 +1,5 @@
 ﻿using Drive.Presentation.Abstractions;
 using Drive.Domain.Repositories;
-using File = Drive.Data.Entities.Models.File;
 using Drive.Data.Entities.Models;
 using Drive.Domain.Enums;
 using Drive.Presentation.Extensions;

@@ -36,6 +36,8 @@ namespace Drive.Presentation.Commands
             }
 
             currentDirectory = folderToEnter;
+
+            //Maybe can be done with navigation properties??
             currentFolders = _folderRepository.GetByParent(currentDirectory.Id);
             currentFiles = _fileRepository.GetByParent(currentDirectory.Id);
         }

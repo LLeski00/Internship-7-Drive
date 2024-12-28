@@ -40,6 +40,8 @@ public class UserRepository : BaseRepository
 
         userToUpdate.FirstName = user.FirstName;
         userToUpdate.LastName = user.LastName;
+        userToUpdate.Email = user.Email;
+        userToUpdate.Password = user.Password;
 
         return SaveChanges();
     }

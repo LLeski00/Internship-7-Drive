@@ -10,12 +10,12 @@ namespace Drive.Presentation.Actions.Disk
     public class FileEditAction : IAction
     {
         private readonly FileRepository _fileRepository;
-        public Data.Entities.Models.File FileToEdit { get; set; }
+        public File FileToEdit { get; set; }
 
         public string Name { get; set; } = "Edit file";
         public int MenuIndex { get; set; }
 
-        public FileEditAction(FileRepository fileRepository, Data.Entities.Models.File fileToEdit)
+        public FileEditAction(FileRepository fileRepository, File fileToEdit)
         {
             _fileRepository = fileRepository;
             FileToEdit = fileToEdit;
