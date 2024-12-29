@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Drive.Data.Migrations
 {
     [DbContext(typeof(DriveDbContext))]
-    [Migration("20241225164934_Initial")]
+    [Migration("20241229160708_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -67,9 +67,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 1,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4156),
+                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1403),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4157),
+                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1405),
                             Name = "TodoList",
                             OwnerId = 1,
                             Size = 20L
@@ -78,9 +78,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 2,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4160),
+                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1409),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4160),
+                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1410),
                             Name = "TodoList2",
                             OwnerId = 1,
                             Size = 20L
@@ -89,9 +89,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 3,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4161),
+                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1411),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4162),
+                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1411),
                             Name = "TodoList3",
                             OwnerId = 1,
                             Size = 20L
@@ -100,22 +100,22 @@ namespace Drive.Data.Migrations
                         {
                             Id = 4,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4163),
+                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1412),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4163),
+                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1413),
                             Name = "TodoList4",
-                            OwnerId = 1,
+                            OwnerId = 2,
                             Size = 20L
                         },
                         new
                         {
                             Id = 5,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4164),
+                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1414),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4165),
+                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1414),
                             Name = "TodoList5",
-                            OwnerId = 1,
+                            OwnerId = 2,
                             Size = 20L
                         });
                 });
@@ -174,6 +174,29 @@ namespace Drive.Data.Migrations
                             Name = "bin",
                             OwnerId = 1,
                             ParentFolderId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsRoot = true,
+                            Name = "root",
+                            OwnerId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsRoot = false,
+                            Name = "new",
+                            OwnerId = 2,
+                            ParentFolderId = 4
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsRoot = false,
+                            Name = "some",
+                            OwnerId = 2,
+                            ParentFolderId = 4
                         });
                 });
 
@@ -209,13 +232,67 @@ namespace Drive.Data.Migrations
                         },
                         new
                         {
-                            FolderId = 1,
+                            FolderId = 4,
                             FileId = 4
                         },
                         new
                         {
-                            FolderId = 1,
+                            FolderId = 5,
                             FileId = 5
+                        });
+                });
+
+            modelBuilder.Entity("Drive.Data.Entities.Models.SharedFile", b =>
+                {
+                    b.Property<int>("FileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FileId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SharedFiles");
+
+                    b.HasData(
+                        new
+                        {
+                            FileId = 4,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            FileId = 1,
+                            UserId = 2
+                        });
+                });
+
+            modelBuilder.Entity("Drive.Data.Entities.Models.SharedFolder", b =>
+                {
+                    b.Property<int>("FolderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FolderId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SharedFolders");
+
+                    b.HasData(
+                        new
+                        {
+                            FolderId = 5,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            FolderId = 2,
+                            UserId = 2
                         });
                 });
 
@@ -251,9 +328,17 @@ namespace Drive.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Email = "llesko00@gmail.com",
-                            FirstName = "Luka",
-                            LastName = "Leskovec",
+                            Email = "kimi@gmail.com",
+                            FirstName = "Kimi",
+                            LastName = "Raikonen",
+                            Password = "1234"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "seb@gmail.com",
+                            FirstName = "Sebastian",
+                            LastName = "Vettel",
                             Password = "1234"
                         });
                 });
@@ -306,16 +391,65 @@ namespace Drive.Data.Migrations
                     b.Navigation("Folder");
                 });
 
+            modelBuilder.Entity("Drive.Data.Entities.Models.SharedFile", b =>
+                {
+                    b.HasOne("Drive.Data.Entities.Models.File", "File")
+                        .WithMany("SharedFiles")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Drive.Data.Entities.Models.User", "User")
+                        .WithMany("SharedFiles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("File");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Drive.Data.Entities.Models.SharedFolder", b =>
+                {
+                    b.HasOne("Drive.Data.Entities.Models.Folder", "Folder")
+                        .WithMany("SharedFolders")
+                        .HasForeignKey("FolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Drive.Data.Entities.Models.User", "User")
+                        .WithMany("SharedFolders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Folder");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Drive.Data.Entities.Models.File", b =>
                 {
                     b.Navigation("FolderFiles");
+
+                    b.Navigation("SharedFiles");
                 });
 
             modelBuilder.Entity("Drive.Data.Entities.Models.Folder", b =>
                 {
                     b.Navigation("FolderFiles");
 
+                    b.Navigation("SharedFolders");
+
                     b.Navigation("Subfolders");
+                });
+
+            modelBuilder.Entity("Drive.Data.Entities.Models.User", b =>
+                {
+                    b.Navigation("SharedFiles");
+
+                    b.Navigation("SharedFolders");
                 });
 #pragma warning restore 612, 618
         }

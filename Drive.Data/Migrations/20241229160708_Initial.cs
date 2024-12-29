@@ -84,6 +84,30 @@ namespace Drive.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SharedFiles",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    FileId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SharedFiles", x => new { x.FileId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_SharedFiles_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SharedFiles_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FolderFiles",
                 columns: table => new
                 {
@@ -107,27 +131,59 @@ namespace Drive.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SharedFolders",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    FolderId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SharedFolders", x => new { x.FolderId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_SharedFolders_Folders_FolderId",
+                        column: x => x.FolderId,
+                        principalTable: "Folders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SharedFolders_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "FirstName", "LastName", "Password" },
-                values: new object[] { 1, "llesko00@gmail.com", "Luka", "Leskovec", "1234" });
+                values: new object[,]
+                {
+                    { 1, "kimi@gmail.com", "Kimi", "Raikonen", "1234" },
+                    { 2, "seb@gmail.com", "Sebastian", "Vettel", "1234" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Files",
                 columns: new[] { "Id", "Content", "CreatedOn", "Extension", "LastChanged", "Name", "OwnerId", "Size" },
                 values: new object[,]
                 {
-                    { 1, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4156), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4157), "TodoList", 1, 20L },
-                    { 2, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4160), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4160), "TodoList2", 1, 20L },
-                    { 3, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4161), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4162), "TodoList3", 1, 20L },
-                    { 4, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4163), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4163), "TodoList4", 1, 20L },
-                    { 5, "Some random text.", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4164), "txt", new DateTime(2024, 12, 25, 16, 49, 34, 468, DateTimeKind.Utc).AddTicks(4165), "TodoList5", 1, 20L }
+                    { 1, "Some random text.", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1403), "txt", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1405), "TodoList", 1, 20L },
+                    { 2, "Some random text.", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1409), "txt", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1410), "TodoList2", 1, 20L },
+                    { 3, "Some random text.", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1411), "txt", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1411), "TodoList3", 1, 20L },
+                    { 4, "Some random text.", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1412), "txt", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1413), "TodoList4", 2, 20L },
+                    { 5, "Some random text.", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1414), "txt", new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1414), "TodoList5", 2, 20L }
                 });
 
             migrationBuilder.InsertData(
                 table: "Folders",
                 columns: new[] { "Id", "IsRoot", "Name", "OwnerId", "ParentFolderId" },
-                values: new object[] { 1, true, "root", 1, null });
+                values: new object[,]
+                {
+                    { 1, true, "root", 1, null },
+                    { 4, true, "root", 2, null }
+                });
 
             migrationBuilder.InsertData(
                 table: "FolderFiles",
@@ -135,8 +191,7 @@ namespace Drive.Data.Migrations
                 values: new object[,]
                 {
                     { 1, 1 },
-                    { 4, 1 },
-                    { 5, 1 }
+                    { 4, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -145,7 +200,18 @@ namespace Drive.Data.Migrations
                 values: new object[,]
                 {
                     { 2, false, "obj", 1, 1 },
-                    { 3, false, "bin", 1, 1 }
+                    { 3, false, "bin", 1, 1 },
+                    { 5, false, "new", 2, 4 },
+                    { 6, false, "some", 2, 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SharedFiles",
+                columns: new[] { "FileId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 2 },
+                    { 4, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -154,7 +220,17 @@ namespace Drive.Data.Migrations
                 values: new object[,]
                 {
                     { 2, 2 },
-                    { 3, 3 }
+                    { 3, 3 },
+                    { 5, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SharedFolders",
+                columns: new[] { "FolderId", "UserId" },
+                values: new object[,]
+                {
+                    { 2, 2 },
+                    { 5, 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -178,6 +254,16 @@ namespace Drive.Data.Migrations
                 name: "IX_Folders_ParentFolderId",
                 table: "Folders",
                 column: "ParentFolderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SharedFiles_UserId",
+                table: "SharedFiles",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SharedFolders_UserId",
+                table: "SharedFolders",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -185,6 +271,12 @@ namespace Drive.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "FolderFiles");
+
+            migrationBuilder.DropTable(
+                name: "SharedFiles");
+
+            migrationBuilder.DropTable(
+                name: "SharedFolders");
 
             migrationBuilder.DropTable(
                 name: "Files");

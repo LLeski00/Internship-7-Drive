@@ -34,5 +34,6 @@
         public User? Owner { get; set; }
 
         public ICollection<FolderFile> FolderFiles { get; set; } = new List<FolderFile>();
+        public ICollection<SharedFile> SharedFiles { get; set; } = new List<SharedFile>();
     }
 }

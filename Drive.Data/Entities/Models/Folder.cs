@@ -28,5 +28,6 @@
 
         public ICollection<FolderFile> FolderFiles { get; set; } = new List<FolderFile>();
         public ICollection<Folder> Subfolders { get; set; } = new List<Folder>();
+        public ICollection<SharedFolder> SharedFolders { get; set; } = new List<SharedFolder>();
     }
 }

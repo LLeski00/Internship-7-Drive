@@ -15,5 +15,8 @@
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public ICollection<SharedFile> SharedFiles { get; set; } = new List<SharedFile>();
+        public ICollection<SharedFolder> SharedFolders { get; set; } = new List<SharedFolder>();
     }
 }

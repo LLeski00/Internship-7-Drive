@@ -17,6 +17,8 @@ public class DriveDbContext : DbContext
     public DbSet<File> Files => Set<File>();
     public DbSet<Folder> Folders => Set<Folder>();
     public DbSet<FolderFile> FolderFiles => Set<FolderFile>();
+    public DbSet<SharedFolder> SharedFolders => Set<SharedFolder>();
+    public DbSet<SharedFile> SharedFiles => Set<SharedFile>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,6 +61,36 @@ public class DriveDbContext : DbContext
                 v => v.ToUniversalTime(),
                 v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
             );
+
+        modelBuilder.Entity<SharedFile>()
+            .HasKey(sf => new { sf.FileId, sf.UserId });
+
+        modelBuilder.Entity<SharedFile>()
+            .HasOne(sf => sf.File)
+            .WithMany(f => f.SharedFiles)
+            .HasForeignKey(sf => sf.FileId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SharedFile>()
+            .HasOne(sf => sf.User)
+            .WithMany(u => u.SharedFiles)
+            .HasForeignKey(sf => sf.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SharedFolder>()
+            .HasKey(sf => new { sf.FolderId, sf.UserId });
+
+        modelBuilder.Entity<SharedFolder>()
+            .HasOne(sf => sf.Folder)
+            .WithMany(f => f.SharedFolders)
+            .HasForeignKey(sf => sf.FolderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SharedFolder>()
+            .HasOne(sf => sf.User)
+            .WithMany(u => u.SharedFolders)
+            .HasForeignKey(sf => sf.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         DatabaseSeeder.Seed(modelBuilder);
         base.OnModelCreating(modelBuilder);
