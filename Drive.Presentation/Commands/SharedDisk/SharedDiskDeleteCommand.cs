@@ -9,17 +9,23 @@ using Drive.Presentation.Actions.Disk;
 
 namespace Drive.Presentation.Commands
 {
-    public class DeleteCommand : ICommand
+    public class SharedDiskDeleteCommand : ICommand
     {
         public string Name { get; set; } = "delete";
         public string Description { get; set; } = "Deletes a file or a folder in the current directory. Usage: delete file 'name.extension' or delete folder 'name'";
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
+        private readonly SharedFileRepository _sharedFileRepository;
+        private readonly SharedFolderRepository _sharedFolderRepository;
+        public User User { get; set; }
 
-        public DeleteCommand(FileRepository fileRepository, FolderRepository folderRepository)
+        public SharedDiskDeleteCommand(FileRepository fileRepository, FolderRepository folderRepository, SharedFileRepository sharedFileRepository, SharedFolderRepository sharedFolderRepository, User user)
         {
             _fileRepository = fileRepository;
             _folderRepository = folderRepository;
+            _sharedFileRepository = sharedFileRepository;
+            _sharedFolderRepository = sharedFolderRepository;
+            User = user;
         }
 
         public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
@@ -36,11 +42,11 @@ namespace Drive.Presentation.Commands
             switch (deleteType)
             {
                 case "file":
-                    var fileDeleteAction = new FileDeleteAction(_fileRepository, commandArgumentsSplit[1], currentFiles);
+                    var fileDeleteAction = new FileDeleteSharedAction(_sharedFileRepository, commandArgumentsSplit[1], currentFiles, User);
                     fileDeleteAction.Open();
                     break;
                 case "folder":
-                    var folderDeleteAction = new FolderDeleteAction(_folderRepository, commandArgumentsSplit[1], currentFolders);
+                    var folderDeleteAction = new FolderDeleteSharedAction(_sharedFolderRepository, commandArgumentsSplit[1], currentFolders, User);
                     folderDeleteAction.Open();
                     break;
                 default:

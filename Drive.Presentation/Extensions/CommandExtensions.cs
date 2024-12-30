@@ -1,6 +1,7 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Domain.Enums;
 using Drive.Presentation.Abstractions;
+using Drive.Presentation.Commands;
 using Drive.Presentation.Factories;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
@@ -28,9 +29,31 @@ public static class CommandExtensions
         PrintCommands(allCommands);
     }
 
+    public static void PrintAllSharedDiskCommands(User user)
+    {
+        var allCommands = CommandFactory.CreateSharedDiskCommands(user);
+        PrintCommands(allCommands);
+    }
+
     public static void Execute(this Command? command, ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments, User user)
     {
+        //Maybe not needed to create all commands
         var allCommands = CommandFactory.CreateCommands(user);
+        var commandToBeExecuted = allCommands.FirstOrDefault(c => c.Name == command.ToString());
+
+        if (commandToBeExecuted == null)
+        {
+            Writer.Error("The command was not found.");
+            return;
+        }
+
+        commandToBeExecuted.Execute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments);
+    }
+
+    public static void SharedExecute(this Command? command, ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments, User user)
+    {
+        //Maybe not needed to create all commands
+        var allCommands = CommandFactory.CreateSharedDiskCommands(user);
         var commandToBeExecuted = allCommands.FirstOrDefault(c => c.Name == command.ToString());
 
         if (commandToBeExecuted == null)
@@ -62,27 +85,5 @@ public static class CommandExtensions
         {
             Console.WriteLine($"- {command.Name}\t{command.Description}");
         }
-    }
-
-    public static void ProcessUserCommands(Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, User user)
-    {
-        do
-        {
-            DiskExtensions.PrintDirectory(currentFolders, currentFiles);
-            Reader.ReadCommand(currentDirectory, out var userInput);
-            var command = GetCommandFromString(userInput);
-
-            if (command == null)
-            {
-                Writer.Error("Invalid command. Use 'help' for a list of commands.");
-                continue;
-            }
-
-            if (userInput == Command.exit.ToString())
-                break;
-
-            var commandArguments = string.Join(' ', userInput.Split(' ').Skip(1));
-            command.Execute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments, user);
-        } while (true);
     }
 }

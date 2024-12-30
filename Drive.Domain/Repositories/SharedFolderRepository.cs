@@ -24,16 +24,16 @@ public class SharedFolderRepository : BaseRepository
         return SaveChanges();
     }
 
-    public ResponseResultType Delete(int id)
+    public ResponseResultType Delete(int fileId, int userId)
     {
-        var folderToDelete = DbContext.SharedFolders.Find(id);
+        var fileToDelete = DbContext.SharedFiles.FirstOrDefault(f => f.FileId == fileId && f.UserId == userId);
 
-        if (folderToDelete is null)
+        if (fileToDelete is null)
         {
             return ResponseResultType.NotFound;
         }
 
-        DbContext.SharedFolders.Remove(folderToDelete);
+        DbContext.SharedFiles.Remove(fileToDelete);
 
         return SaveChanges();
     }
@@ -53,6 +53,23 @@ public class SharedFolderRepository : BaseRepository
                                 .ToList();
 
         return userSharedFolders;
+    }
+
+    public ICollection<User> GetUsersByFolder(Folder folder)
+    {
+        if (folder == null)
+        {
+            return new List<User>();
+        }
+
+        var users = DbContext.SharedFolders
+                                .Where(f => f.FolderId == folder.Id)
+                                .Include(f => f.User)
+                                .Where(f => f.User != null)
+                                .Select(f => f.User!)
+                                .ToList();
+
+        return users;
     }
 
     public ICollection<SharedFolder> GetAll() => DbContext.SharedFolders.ToList();

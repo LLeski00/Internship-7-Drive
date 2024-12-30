@@ -24,9 +24,9 @@ public class SharedFileRepository : BaseRepository
         return SaveChanges();
     }
 
-    public ResponseResultType Delete(int id)
+    public ResponseResultType Delete(int fileId, int userId)
     {
-        var fileToDelete = DbContext.SharedFiles.Find(id);
+        var fileToDelete = DbContext.SharedFiles.FirstOrDefault(f => f.FileId == fileId && f.UserId == userId);
 
         if (fileToDelete is null)
         {

@@ -15,10 +15,26 @@ public class CommandFactory
             new HelpCommand(user),
             new ChangeDirectoryCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new CreateCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<FolderFileRepository>(), user),
-            new DeleteCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<FolderFileRepository>()),
+            new DeleteCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new RenameCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new EditCommand(RepositoryFactory.Create<FileRepository>()),
             new BackCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
+            new ExitCommand()
+        };
+
+        return commands;
+    }
+
+    public static IList<ICommand> CreateSharedDiskCommands(User user)
+    {
+        var commands = new List<ICommand>
+        {
+            new SharedDiskHelpCommand(user),
+            new ChangeDirectoryCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
+            new SharedDiskDeleteCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<SharedFileRepository>(), RepositoryFactory.Create<SharedFolderRepository>(), user),
+            new RenameCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
+            new EditCommand(RepositoryFactory.Create<FileRepository>()),
+            new SharedDiskBackCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<SharedFileRepository>(), RepositoryFactory.Create<SharedFolderRepository>(), user),
             new ExitCommand()
         };
 
