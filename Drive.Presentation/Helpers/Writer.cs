@@ -27,6 +27,7 @@ public class Writer
 
     public static string GenerateRandomCaptcha()
     {
+        //Make sure that this includes at least one number and at least one letter
         var randomString = Guid.NewGuid().ToString("N").Substring(0, 5);
         
         return randomString;

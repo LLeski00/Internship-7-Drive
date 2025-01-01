@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Drive.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -160,9 +160,9 @@ namespace Drive.Data.Migrations
                 columns: new[] { "Id", "Content", "CreatedOn", "Extension", "LastChanged", "Name", "OwnerId", "ParentFolderId", "Size" },
                 values: new object[,]
                 {
-                    { 1, "Some random text.", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7215), "txt", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7217), "TodoList", 1, 1, 20L },
-                    { 2, "Some random text.", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7219), "txt", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7220), "TodoList2", 1, 1, 20L },
-                    { 4, "Some random text.", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7222), "txt", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7222), "TodoList4", 2, 4, 20L }
+                    { 1, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5421), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5421), "TodoList", 1, 1, 20L },
+                    { 2, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5424), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5425), "TodoList2", 1, 1, 20L },
+                    { 4, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5427), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5428), "TodoList4", 2, 4, 20L }
                 });
 
             migrationBuilder.InsertData(
@@ -181,8 +181,8 @@ namespace Drive.Data.Migrations
                 columns: new[] { "Id", "Content", "CreatedOn", "Extension", "LastChanged", "Name", "OwnerId", "ParentFolderId", "Size" },
                 values: new object[,]
                 {
-                    { 3, "Some random text.", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7221), "txt", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7221), "TodoList3", 1, 2, 20L },
-                    { 5, "Some random text.", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7223), "txt", new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7224), "TodoList5", 2, 5, 20L }
+                    { 3, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5426), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5426), "TodoList3", 1, 2, 20L },
+                    { 5, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5429), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5429), "TodoList5", 2, 5, 20L }
                 });
 
             migrationBuilder.InsertData(
@@ -200,6 +200,15 @@ namespace Drive.Data.Migrations
                 values: new object[,]
                 {
                     { 2, 2 },
+                    { 5, 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SharedFiles",
+                columns: new[] { "FileId", "UserId" },
+                values: new object[,]
+                {
+                    { 3, 2 },
                     { 5, 1 }
                 });
 

@@ -79,7 +79,9 @@ public static class DatabaseSeeder
             .HasData(new List<SharedFile>
             {
                 new SharedFile(1, 4),
+                new SharedFile(1, 5),
                 new SharedFile(2, 1),
+                new SharedFile(2, 3),
             });
 
         builder.Entity<SharedFolder>()

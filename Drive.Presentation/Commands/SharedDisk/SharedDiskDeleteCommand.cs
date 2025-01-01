@@ -13,16 +13,12 @@ namespace Drive.Presentation.Commands
     {
         public string Name { get; set; } = "delete";
         public string Description { get; set; } = "Deletes a file or a folder in the current directory. Usage: delete file 'name.extension' or delete folder 'name'";
-        private readonly FileRepository _fileRepository;
-        private readonly FolderRepository _folderRepository;
         private readonly SharedFileRepository _sharedFileRepository;
         private readonly SharedFolderRepository _sharedFolderRepository;
         public User User { get; set; }
 
-        public SharedDiskDeleteCommand(FileRepository fileRepository, FolderRepository folderRepository, SharedFileRepository sharedFileRepository, SharedFolderRepository sharedFolderRepository, User user)
+        public SharedDiskDeleteCommand(SharedFileRepository sharedFileRepository, SharedFolderRepository sharedFolderRepository, User user)
         {
-            _fileRepository = fileRepository;
-            _folderRepository = folderRepository;
             _sharedFileRepository = sharedFileRepository;
             _sharedFolderRepository = sharedFolderRepository;
             User = user;
@@ -39,20 +35,7 @@ namespace Drive.Presentation.Commands
             var commandArgumentsSplit = commandArguments.Split(' ');
             var deleteType = commandArgumentsSplit[0];
 
-            switch (deleteType)
-            {
-                case "file":
-                    var fileDeleteAction = new FileDeleteSharedAction(_sharedFileRepository, commandArgumentsSplit[1], currentFiles, User);
-                    fileDeleteAction.Open();
-                    break;
-                case "folder":
-                    var folderDeleteAction = new FolderDeleteSharedAction(_sharedFolderRepository, commandArgumentsSplit[1], currentFolders, User);
-                    folderDeleteAction.Open();
-                    break;
-                default:
-                    Writer.CommandError(Name, Description);
-                    break;
-            }
+            OpenActionByType(deleteType, commandArgumentsSplit[1], currentFiles, currentFolders);
         }
 
         public bool IsCommandValid(string commandArguments)
@@ -71,6 +54,47 @@ namespace Drive.Presentation.Commands
                 return false;
 
             return true;
+        }
+
+        public void OpenActionByType(string deleteType, string name, ICollection<File> currentFiles, ICollection<Folder> currentFolders)
+        {
+            switch (deleteType)
+            {
+                case "file":
+                    if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this file?"))
+                        return;
+
+                    var nameSplit = name.Split('.');
+                    var fileToDelete = DiskExtensions.GetFileByName(currentFiles, nameSplit[0], nameSplit[1]);
+
+                    if (fileToDelete == null)
+                    {
+                        Console.WriteLine("The file was not found.");
+                        return;
+                    }
+
+                    var fileDeleteAction = new FileDeleteSharedAction(_sharedFileRepository, fileToDelete, User);
+                    fileDeleteAction.Open();
+                    break;
+                case "folder":
+                    if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this file?"))
+                        return;
+
+                    var folderToDelete = DiskExtensions.GetFolderByName(currentFolders, name);
+
+                    if (folderToDelete == null)
+                    {
+                        Console.WriteLine("The folder was not found.");
+                        return;
+                    }
+
+                    var folderDeleteAction = new FolderDeleteSharedAction(_sharedFolderRepository, _sharedFileRepository, folderToDelete, User);
+                    folderDeleteAction.Open();
+                    break;
+                default:
+                    Writer.CommandError(Name, Description);
+                    break;
+            }
         }
     }
 }

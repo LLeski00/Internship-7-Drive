@@ -54,14 +54,14 @@ namespace Drive.Presentation.Commands
                 if (newCurrentDirectory != null) 
                     currentDirectory = newCurrentDirectory;
 
-                currentFolders = _sharedFolderRepository.GetFoldersByUser(User);
-                currentFiles = _sharedFileRepository.GetFilesByUser(User);
+                currentFolders = _sharedFolderRepository.GetFoldersFromRootByUser(User);
+                currentFiles = _sharedFileRepository.GetFilesFromRootByUser(User);
                 return;
             }
 
             currentDirectory = newCurrentDirectory;
-            currentFolders = _folderRepository.GetByParent(currentDirectory.Id);
-            currentFiles = _fileRepository.GetByParent(currentDirectory.Id);
+            currentFolders = _sharedFolderRepository.GetFoldersByUser(User, currentDirectory.Id);
+            currentFiles = _sharedFileRepository.GetFilesByUser(User, currentDirectory.Id);
         }
 
         public bool IsCommandValid(string? commandArguments)

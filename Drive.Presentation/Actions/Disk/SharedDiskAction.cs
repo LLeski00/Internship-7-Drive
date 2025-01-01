@@ -36,8 +36,8 @@ namespace Drive.Presentation.Actions.Disk
                 return;
             }
 
-            var currentFolders = _sharedFolderRepository.GetFoldersByUser(User);
-            var currentFiles = _sharedFileRepository.GetFilesByUser(User);
+            var currentFolders = _sharedFolderRepository.GetFoldersFromRootByUser(User);
+            var currentFiles = _sharedFileRepository.GetFilesFromRootByUser(User);
 
             Console.Clear();
             ProcessUserCommands(root, currentFolders, currentFiles, User);
@@ -62,6 +62,8 @@ namespace Drive.Presentation.Actions.Disk
 
                 var commandArguments = string.Join(' ', userInput.Split(' ').Skip(1));
                 command.SharedExecute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments, user);
+                currentFolders = _sharedFolderRepository.GetFoldersByUser(User, currentDirectory.Id);
+                currentFiles = _sharedFileRepository.GetFilesByUser(User, currentDirectory.Id);
             } while (true);
         }
 

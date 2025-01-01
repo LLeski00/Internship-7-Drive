@@ -2,12 +2,6 @@
 {
     public class Folder
     {
-        public Folder(string name, int ownerId)
-        {
-            Name = name;
-            OwnerId = ownerId;
-        }
-
         public Folder(string name, int ownerId, int? parentFolderId)
         {
             Name = name;

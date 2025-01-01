@@ -1,53 +1,61 @@
 ﻿using Drive.Presentation.Abstractions;
 using Drive.Domain.Repositories;
 using Drive.Domain.Enums;
-using Drive.Presentation.Extensions;
 using Drive.Presentation.Helpers;
 using Drive.Data.Entities.Models;
+using Drive.Domain.Factories;
 
 namespace Drive.Presentation.Actions.Disk
 {
     public class FolderDeleteSharedAction : IAction
     {
         private readonly SharedFolderRepository _sharedFolderRepository;
-        public string FolderToDelete { get; set; }
-        public ICollection<Folder> CurrentFolders { get; set; }
+        private readonly SharedFileRepository _sharedFileRepository;
+        public Folder FolderToDelete { get; set; }
         public User User { get; set; }
 
         public string Name { get; set; } = "Delete shared folder";
         public int MenuIndex { get; set; }
 
-        public FolderDeleteSharedAction(SharedFolderRepository sharedFolderRepository, string folderToDelete, ICollection<Folder> currentFolders, User user)
+        public FolderDeleteSharedAction(SharedFolderRepository sharedFolderRepository, SharedFileRepository sharedFileRepository, Folder folderToDelete, User user)
         {
             _sharedFolderRepository = sharedFolderRepository;
+            _sharedFileRepository = sharedFileRepository;
             FolderToDelete = folderToDelete;
-            CurrentFolders = currentFolders;
             User = user;
         }
 
         public void Open()
         {
-            var folderToDelete = DiskExtensions.GetFolderByName(CurrentFolders, FolderToDelete);
+            if (DeleteFolderAndChildren(FolderToDelete) == ResponseResultType.Success)
+                Console.WriteLine("The folder was successfully removed from shared disk.");
+        }
 
-            if (folderToDelete == null)
+        public ResponseResultType DeleteFolderAndChildren(Folder folderToDelete)
+        {
+            var subfolders = _sharedFolderRepository.GetFoldersByUser(User, folderToDelete.Id);
+
+            foreach (var subfolder in subfolders)
             {
-                Writer.Error("Folder with that name doesn't exist in this folder!");
-                return;
+                var response = DeleteFolderAndChildren(subfolder);
+                if (response != ResponseResultType.Success)
+                    return response;
             }
 
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this folder?"))
-                return;
+            var childrenFiles = _sharedFileRepository.GetFilesByUser(User, folderToDelete.Id);
 
-            var response = _sharedFolderRepository.Delete(folderToDelete.Id, User.Id);
-
-            if (response != ResponseResultType.Success)
+            foreach (var child in childrenFiles)
             {
-                Writer.Error("ERROR: Something went wrong with deleting the folder.");
-                return;
+                var deleteSharedFileAction = new FileDeleteSharedAction(RepositoryFactory.Create<SharedFileRepository>(), child, User);
+                deleteSharedFileAction.Open();
             }
 
-            CurrentFolders.Remove(folderToDelete);
-            Console.WriteLine("Folder successfully deleted.");
+            var folderResponse = _sharedFolderRepository.Delete(folderToDelete.Id, User.Id);
+
+            if (folderResponse != ResponseResultType.Success)
+                Writer.Error($"ERROR: Something went wrong with deleting the folder {folderToDelete.Name}.");
+
+            return folderResponse;
         }
     }
 }

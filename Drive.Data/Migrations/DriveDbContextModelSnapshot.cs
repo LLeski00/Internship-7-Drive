@@ -69,9 +69,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 1,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7215),
+                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5421),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7217),
+                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5421),
                             Name = "TodoList",
                             OwnerId = 1,
                             ParentFolderId = 1,
@@ -81,9 +81,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 2,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7219),
+                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5424),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7220),
+                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5425),
                             Name = "TodoList2",
                             OwnerId = 1,
                             ParentFolderId = 1,
@@ -93,9 +93,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 3,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7221),
+                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5426),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7221),
+                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5426),
                             Name = "TodoList3",
                             OwnerId = 1,
                             ParentFolderId = 2,
@@ -105,9 +105,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 4,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7222),
+                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5427),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7222),
+                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5428),
                             Name = "TodoList4",
                             OwnerId = 2,
                             ParentFolderId = 4,
@@ -117,9 +117,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 5,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7223),
+                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5429),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7224),
+                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5429),
                             Name = "TodoList5",
                             OwnerId = 2,
                             ParentFolderId = 5,
@@ -220,7 +220,17 @@ namespace Drive.Data.Migrations
                         },
                         new
                         {
+                            FileId = 5,
+                            UserId = 1
+                        },
+                        new
+                        {
                             FileId = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            FileId = 3,
                             UserId = 2
                         });
                 });

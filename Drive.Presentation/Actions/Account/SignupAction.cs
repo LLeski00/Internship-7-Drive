@@ -80,7 +80,7 @@ namespace Drive.Presentation.Actions.Account
 
             Console.WriteLine("The user was successfully added!");
 
-            var rootFolder = new Folder("root", newUser.Id);
+            var rootFolder = new Folder("root", newUser.Id, null);
             responseResult = _folderRepository.Add(rootFolder);
 
             if (responseResult != ResponseResultType.Success)
