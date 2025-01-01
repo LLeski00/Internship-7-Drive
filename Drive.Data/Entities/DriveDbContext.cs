@@ -16,36 +16,26 @@ public class DriveDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<File> Files => Set<File>();
     public DbSet<Folder> Folders => Set<Folder>();
-    public DbSet<FolderFile> FolderFiles => Set<FolderFile>();
     public DbSet<SharedFolder> SharedFolders => Set<SharedFolder>();
     public DbSet<SharedFile> SharedFiles => Set<SharedFile>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Folder>()
-            .HasIndex(f => new { f.OwnerId, f.IsRoot })
+            .HasIndex(f => new { f.OwnerId, f.ParentFolderId })
             .IsUnique()
-            .HasFilter("\"IsRoot\" = TRUE");
+            .HasFilter("\"ParentFolderId\" IS NULL");
 
         modelBuilder.Entity<Folder>()
-            .HasMany(f => f.Subfolders)
-            .WithOne(f => f.ParentFolder)
+            .HasOne(f => f.ParentFolder)
+            .WithMany()
             .HasForeignKey(f => f.ParentFolderId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<FolderFile>()
-            .HasKey(ff => new { ff.FolderId, ff.FileId });
-
-        modelBuilder.Entity<FolderFile>()
-            .HasOne(fi => fi.File)
-            .WithMany(fi => fi.FolderFiles)
-            .HasForeignKey(ff => ff.FileId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<FolderFile>()
-            .HasOne(fo => fo.Folder)
-            .WithMany(fo => fo.FolderFiles)
-            .HasForeignKey(ff => ff.FolderId)
+        modelBuilder.Entity<File>()
+            .HasOne(f => f.ParentFolder)
+            .WithMany()
+            .HasForeignKey(f => f.ParentFolderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<File>()

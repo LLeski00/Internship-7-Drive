@@ -52,7 +52,6 @@ public class FileRepository : BaseRepository
         fileToUpdate.Content = file.Content;
         fileToUpdate.Size = file.Size;
         fileToUpdate.LastChanged = DateTime.UtcNow;
-        fileToUpdate.FolderFiles = file.FolderFiles;
 
         return SaveChanges();
     }
@@ -118,7 +117,7 @@ public class FileRepository : BaseRepository
         }
 
         var filesInFolder = DbContext.Files
-        .Where(f => f.OwnerId == user.Id && f.FolderFiles.Any(ff => ff.FolderId == currentFolderId))
+        .Where(f => f.OwnerId == user.Id && f.ParentFolderId == currentFolderId)
         .ToList();
 
         return filesInFolder;
@@ -127,25 +126,10 @@ public class FileRepository : BaseRepository
     public ICollection<File> GetByParent(int currentFolderId)
     {
         var filesInFolder = DbContext.Files
-        .Where(f => f.FolderFiles.Any(ff => ff.FolderId == currentFolderId))
+        .Where(f => f.ParentFolderId == currentFolderId)
         .ToList();
 
         return filesInFolder;
-    }
-
-    public void LoadUsersFiles(User user)
-    {
-        var userFiles = GetAllByUser(user);
-
-        var userFolderFiles = DbContext.FolderFiles
-            .Where(ff => userFiles.Select(f => f.Id).Contains(ff.FileId))
-            .ToList();
-
-        foreach (var file in userFiles)
-        {
-            file.FolderFiles = userFolderFiles.Where(uff => uff.FileId == file.Id).ToList();
-            file.Owner = user;
-        }
     }
 
     public ICollection<File> GetAll() => DbContext.Files.ToList();

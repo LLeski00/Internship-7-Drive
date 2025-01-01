@@ -24,23 +24,23 @@ public static class DatabaseSeeder
         builder.Entity<File>()
             .HasData(new List<File>
             {
-                new File("TodoList", "txt", "Some random text.", 20, 1)
+                new File("TodoList", "txt", "Some random text.", 20, 1, 1)
                 {
                     Id = 1,
                 },
-                new File("TodoList2", "txt", "Some random text.", 20, 1)
+                new File("TodoList2", "txt", "Some random text.", 20, 1, 1)
                 {
                     Id = 2,
                 },
-                new File("TodoList3", "txt", "Some random text.", 20, 1)
+                new File("TodoList3", "txt", "Some random text.", 20, 1, 2)
                 {
                     Id = 3,
                 },
-                new File("TodoList4", "txt", "Some random text.", 20, 2)
+                new File("TodoList4", "txt", "Some random text.", 20, 2, 4)
                 {
                     Id = 4,
                 },
-                new File("TodoList5", "txt", "Some random text.", 20, 2)
+                new File("TodoList5", "txt", "Some random text.", 20, 2, 5)
                 {
                     Id = 5,
                 },
@@ -49,7 +49,7 @@ public static class DatabaseSeeder
         builder.Entity<Folder>()
             .HasData(new List<Folder>
             {
-                new Folder("root", 1)
+                new Folder("root", 1, null)
                 {
                     Id = 1,
                 },
@@ -61,7 +61,7 @@ public static class DatabaseSeeder
                 {
                     Id = 3,
                 },
-                new Folder("root", 2)
+                new Folder("root", 2, null)
                 {
                     Id = 4,
                 },
@@ -73,16 +73,6 @@ public static class DatabaseSeeder
                 {
                     Id = 6,
                 },
-            });
-
-        builder.Entity<FolderFile>()
-            .HasData(new List<FolderFile>
-            {
-                new FolderFile(1, 1),
-                new FolderFile(2, 2),
-                new FolderFile(3, 3),
-                new FolderFile(4, 4),
-                new FolderFile(5, 5),
             });
 
         builder.Entity<SharedFile>()

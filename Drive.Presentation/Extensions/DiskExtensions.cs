@@ -1,22 +1,10 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Domain.Factories;
-using Drive.Domain.Repositories;
-using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
 namespace Drive.Presentation.Extensions;
 
 public static class DiskExtensions
 {
-    public static void LoadUsersDisk(User user)
-    {
-        var fileRepository = RepositoryFactory.Create<FileRepository>();
-        var folderRepository = RepositoryFactory.Create<FolderRepository>();
-
-        fileRepository.LoadUsersFiles(user);
-        folderRepository.LoadUsersFolders(user);
-    }
-
     public static void PrintFolder(Folder folder)
     {
         Console.WriteLine($"{folder.Name}");

@@ -31,8 +31,6 @@ namespace Drive.Presentation.Actions.Account
 
             Console.WriteLine("Successfully logged in.");
             Console.ReadLine();
-            Console.WriteLine("Loading disk...");
-            DiskExtensions.LoadUsersDisk(user);
             UserExtensions.PrintUserActions(user);
         }
 

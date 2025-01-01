@@ -50,12 +50,17 @@ namespace Drive.Data.Migrations
                     b.Property<int>("OwnerId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("ParentFolderId")
+                        .HasColumnType("integer");
+
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("ParentFolderId");
 
                     b.ToTable("Files");
 
@@ -64,55 +69,60 @@ namespace Drive.Data.Migrations
                         {
                             Id = 1,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1403),
+                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7215),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1405),
+                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7217),
                             Name = "TodoList",
                             OwnerId = 1,
+                            ParentFolderId = 1,
                             Size = 20L
                         },
                         new
                         {
                             Id = 2,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1409),
+                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7219),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1410),
+                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7220),
                             Name = "TodoList2",
                             OwnerId = 1,
+                            ParentFolderId = 1,
                             Size = 20L
                         },
                         new
                         {
                             Id = 3,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1411),
+                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7221),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1411),
+                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7221),
                             Name = "TodoList3",
                             OwnerId = 1,
+                            ParentFolderId = 2,
                             Size = 20L
                         },
                         new
                         {
                             Id = 4,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1412),
+                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7222),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1413),
+                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7222),
                             Name = "TodoList4",
                             OwnerId = 2,
+                            ParentFolderId = 4,
                             Size = 20L
                         },
                         new
                         {
                             Id = 5,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1414),
+                            CreatedOn = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7223),
                             Extension = "txt",
-                            LastChanged = new DateTime(2024, 12, 29, 16, 7, 8, 269, DateTimeKind.Utc).AddTicks(1414),
+                            LastChanged = new DateTime(2025, 1, 1, 18, 54, 10, 494, DateTimeKind.Utc).AddTicks(7224),
                             Name = "TodoList5",
                             OwnerId = 2,
+                            ParentFolderId = 5,
                             Size = 20L
                         });
                 });
@@ -124,9 +134,6 @@ namespace Drive.Data.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsRoot")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -142,9 +149,9 @@ namespace Drive.Data.Migrations
 
                     b.HasIndex("ParentFolderId");
 
-                    b.HasIndex("OwnerId", "IsRoot")
+                    b.HasIndex("OwnerId", "ParentFolderId")
                         .IsUnique()
-                        .HasFilter("\"IsRoot\" = TRUE");
+                        .HasFilter("\"ParentFolderId\" IS NULL");
 
                     b.ToTable("Folders");
 
@@ -152,14 +159,12 @@ namespace Drive.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsRoot = true,
                             Name = "root",
                             OwnerId = 1
                         },
                         new
                         {
                             Id = 2,
-                            IsRoot = false,
                             Name = "obj",
                             OwnerId = 1,
                             ParentFolderId = 1
@@ -167,7 +172,6 @@ namespace Drive.Data.Migrations
                         new
                         {
                             Id = 3,
-                            IsRoot = false,
                             Name = "bin",
                             OwnerId = 1,
                             ParentFolderId = 1
@@ -175,14 +179,12 @@ namespace Drive.Data.Migrations
                         new
                         {
                             Id = 4,
-                            IsRoot = true,
                             Name = "root",
                             OwnerId = 2
                         },
                         new
                         {
                             Id = 5,
-                            IsRoot = false,
                             Name = "new",
                             OwnerId = 2,
                             ParentFolderId = 4
@@ -190,52 +192,9 @@ namespace Drive.Data.Migrations
                         new
                         {
                             Id = 6,
-                            IsRoot = false,
                             Name = "some",
                             OwnerId = 2,
                             ParentFolderId = 4
-                        });
-                });
-
-            modelBuilder.Entity("Drive.Data.Entities.Models.FolderFile", b =>
-                {
-                    b.Property<int>("FolderId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FileId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("FolderId", "FileId");
-
-                    b.HasIndex("FileId");
-
-                    b.ToTable("FolderFiles");
-
-                    b.HasData(
-                        new
-                        {
-                            FolderId = 1,
-                            FileId = 1
-                        },
-                        new
-                        {
-                            FolderId = 2,
-                            FileId = 2
-                        },
-                        new
-                        {
-                            FolderId = 3,
-                            FileId = 3
-                        },
-                        new
-                        {
-                            FolderId = 4,
-                            FileId = 4
-                        },
-                        new
-                        {
-                            FolderId = 5,
-                            FileId = 5
                         });
                 });
 
@@ -348,7 +307,15 @@ namespace Drive.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Drive.Data.Entities.Models.Folder", "ParentFolder")
+                        .WithMany()
+                        .HasForeignKey("ParentFolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Owner");
+
+                    b.Navigation("ParentFolder");
                 });
 
             modelBuilder.Entity("Drive.Data.Entities.Models.Folder", b =>
@@ -360,32 +327,13 @@ namespace Drive.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Drive.Data.Entities.Models.Folder", "ParentFolder")
-                        .WithMany("Subfolders")
+                        .WithMany()
                         .HasForeignKey("ParentFolderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Owner");
 
                     b.Navigation("ParentFolder");
-                });
-
-            modelBuilder.Entity("Drive.Data.Entities.Models.FolderFile", b =>
-                {
-                    b.HasOne("Drive.Data.Entities.Models.File", "File")
-                        .WithMany("FolderFiles")
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Drive.Data.Entities.Models.Folder", "Folder")
-                        .WithMany("FolderFiles")
-                        .HasForeignKey("FolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("File");
-
-                    b.Navigation("Folder");
                 });
 
             modelBuilder.Entity("Drive.Data.Entities.Models.SharedFile", b =>
@@ -428,18 +376,12 @@ namespace Drive.Data.Migrations
 
             modelBuilder.Entity("Drive.Data.Entities.Models.File", b =>
                 {
-                    b.Navigation("FolderFiles");
-
                     b.Navigation("SharedFiles");
                 });
 
             modelBuilder.Entity("Drive.Data.Entities.Models.Folder", b =>
                 {
-                    b.Navigation("FolderFiles");
-
                     b.Navigation("SharedFolders");
-
-                    b.Navigation("Subfolders");
                 });
 
             modelBuilder.Entity("Drive.Data.Entities.Models.User", b =>

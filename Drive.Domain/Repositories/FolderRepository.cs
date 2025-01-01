@@ -49,8 +49,6 @@ public class FolderRepository : BaseRepository
         folderToUpdate.Name = folder.Name;
         folderToUpdate.ParentFolderId = folder.ParentFolderId;
         folderToUpdate.ParentFolder = folder.ParentFolder;
-        folderToUpdate.FolderFiles = folder.FolderFiles;
-        folderToUpdate.Subfolders = folder.Subfolders;
 
         return SaveChanges();
     }
@@ -116,27 +114,10 @@ public class FolderRepository : BaseRepository
         }
 
         var rootFolder = DbContext.Folders
-            .FirstOrDefault(f => f.OwnerId == user.Id && f.IsRoot);
+            .FirstOrDefault(f => f.OwnerId == user.Id && f.ParentFolderId == null);
 
         return rootFolder;
     }
 
     public ICollection<Folder> GetAll() => DbContext.Folders.ToList();
-
-    public void LoadUsersFolders(User user)
-    {
-        var userFolders = GetAllByUser(user);
-
-        var userFolderFiles = DbContext.FolderFiles
-            .Where(ff => userFolders.Select(f => f.Id).Contains(ff.FolderId))
-            .ToList();
-
-        foreach (var folder in userFolders)
-        {
-            folder.ParentFolder = userFolders.FirstOrDefault(uf => uf.Id == folder.ParentFolderId);
-            folder.Owner = user;
-            folder.FolderFiles = userFolderFiles.Where(uff => uff.FolderId == folder.Id).ToList();
-            folder.Subfolders = userFolders.Where(uf => uf.ParentFolderId == folder.Id).ToList();
-        }
-    }
 }

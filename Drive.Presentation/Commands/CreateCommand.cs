@@ -16,13 +16,11 @@ namespace Drive.Presentation.Commands
         public User User { get; set; }
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
-        private readonly FolderFileRepository _folderFileRepository;
 
-        public CreateCommand(FileRepository fileRepository, FolderRepository folderRepository, FolderFileRepository folderFileRepository, User user)
+        public CreateCommand(FileRepository fileRepository, FolderRepository folderRepository, User user)
         {
             _fileRepository = fileRepository;
             _folderRepository = folderRepository;
-            _folderFileRepository = folderFileRepository;
             User = user;
         }
 
@@ -40,7 +38,7 @@ namespace Drive.Presentation.Commands
             switch (createType)
             {
                 case "file":
-                    var fileAddAction = new FileAddAction(_fileRepository, _folderFileRepository, commandArgumentsSplit[1], currentDirectory, currentFiles, User);
+                    var fileAddAction = new FileAddAction(_fileRepository, commandArgumentsSplit[1], currentDirectory, currentFiles, User);
                     fileAddAction.Open();
                     break;
                 case "folder":

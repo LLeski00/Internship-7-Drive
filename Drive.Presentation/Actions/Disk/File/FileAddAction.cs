@@ -11,7 +11,6 @@ namespace Drive.Presentation.Actions.Disk
     public class FileAddAction : IAction
     {
         private readonly FileRepository _fileRepository;
-        private readonly FolderFileRepository _folderFileRepository;
         public string FileToAdd { get; set; }
         public Folder ParentFolder { get; set; }
         public ICollection<File> CurrentFiles { get; set; }
@@ -20,10 +19,9 @@ namespace Drive.Presentation.Actions.Disk
         public string Name { get; set; } = "Add file";
         public int MenuIndex { get; set; }
 
-        public FileAddAction(FileRepository fileRepository, FolderFileRepository folderFileRepository, string fileToAdd, Folder parentFolder, ICollection<File> currentFiles, User user)
+        public FileAddAction(FileRepository fileRepository, string fileToAdd, Folder parentFolder, ICollection<File> currentFiles, User user)
         {
             _fileRepository = fileRepository;
-            _folderFileRepository = folderFileRepository;
             FileToAdd = fileToAdd;
             ParentFolder = parentFolder;
             CurrentFiles = currentFiles;
@@ -45,22 +43,12 @@ namespace Drive.Presentation.Actions.Disk
             if (!UserExtensions.ConfirmUserAction("Are you sure you want to add this file?"))
                 return;
 
-            var newFile = new File(fileName, fileExtension, User.Id);
+            var newFile = new File(fileName, fileExtension, User.Id, ParentFolder.Id);
             var fileResponse = _fileRepository.Add(newFile);
 
             if (fileResponse != ResponseResultType.Success)
             {
                 Writer.Error("ERROR: Something went wrong with adding the file.");
-                return;
-            }
-
-            var newFolderFile = new FolderFile(ParentFolder.Id, newFile.Id);
-            var folderFileResponse = _folderFileRepository.Add(newFolderFile);
-
-            if (folderFileResponse != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with adding the file.");
-                _fileRepository.Delete(newFile.Id);
                 return;
             }
 
