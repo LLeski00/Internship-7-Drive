@@ -4,10 +4,9 @@ using Drive.Presentation.Abstractions;
 using Drive.Presentation.Helpers;
 using Drive.Presentation.Extensions;
 using File = Drive.Data.Entities.Models.File;
-using Drive.Domain.Enums;
 using Drive.Presentation.Actions.Disk;
 
-namespace Drive.Presentation.Commands
+namespace Drive.Presentation.Commands.SharedDisk
 {
     public class SharedDiskDeleteCommand : ICommand
     {
@@ -40,7 +39,7 @@ namespace Drive.Presentation.Commands
             OpenActionByType(deleteType, commandArgumentsSplit[1], currentFiles, currentFolders);
         }
 
-        public bool IsCommandValid(string commandArguments)
+        public bool IsCommandValid(string? commandArguments)
         {
             if (string.IsNullOrEmpty(commandArguments))
                 return false;

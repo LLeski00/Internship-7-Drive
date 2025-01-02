@@ -114,6 +114,35 @@ namespace Drive.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FileComments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastChanged = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    AuthorId = table.Column<int>(type: "integer", nullable: false),
+                    FileId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FileComments_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FileComments_Users_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SharedFiles",
                 columns: table => new
                 {
@@ -160,9 +189,9 @@ namespace Drive.Data.Migrations
                 columns: new[] { "Id", "Content", "CreatedOn", "Extension", "LastChanged", "Name", "OwnerId", "ParentFolderId", "Size" },
                 values: new object[,]
                 {
-                    { 1, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5421), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5421), "TodoList", 1, 1, 20L },
-                    { 2, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5424), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5425), "TodoList2", 1, 1, 20L },
-                    { 4, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5427), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5428), "TodoList4", 2, 4, 20L }
+                    { 1, "Some random text.", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9313), "txt", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9316), "TodoList", 1, 1, 20L },
+                    { 2, "Some random text.", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9320), "txt", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9321), "TodoList2", 1, 1, 20L },
+                    { 4, "Some random text.", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9324), "txt", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9324), "TodoList4", 2, 4, 20L }
                 });
 
             migrationBuilder.InsertData(
@@ -177,12 +206,21 @@ namespace Drive.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "FileComments",
+                columns: new[] { "Id", "AuthorId", "Content", "CreatedOn", "FileId", "LastChanged" },
+                values: new object[,]
+                {
+                    { 1, 1, "Some random comment", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9438), 1, new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9438) },
+                    { 2, 2, "Even more random comment", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9441), 1, new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9441) }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Files",
                 columns: new[] { "Id", "Content", "CreatedOn", "Extension", "LastChanged", "Name", "OwnerId", "ParentFolderId", "Size" },
                 values: new object[,]
                 {
-                    { 3, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5426), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5426), "TodoList3", 1, 2, 20L },
-                    { 5, "Some random text.", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5429), "txt", new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5429), "TodoList5", 2, 5, 20L }
+                    { 3, "Some random text.", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9322), "txt", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9322), "TodoList3", 1, 2, 20L },
+                    { 5, "Some random text.", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9325), "txt", new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9325), "TodoList5", 2, 5, 20L }
                 });
 
             migrationBuilder.InsertData(
@@ -211,6 +249,16 @@ namespace Drive.Data.Migrations
                     { 3, 2 },
                     { 5, 1 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileComments_AuthorId",
+                table: "FileComments",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileComments_FileId",
+                table: "FileComments",
+                column: "FileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Files_OwnerId",
@@ -248,6 +296,9 @@ namespace Drive.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "FileComments");
+
             migrationBuilder.DropTable(
                 name: "SharedFiles");
 

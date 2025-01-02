@@ -54,7 +54,7 @@ namespace Drive.Presentation.Commands
             }
         }
 
-        public bool IsCommandValid(string commandArguments)
+        public bool IsCommandValid(string? commandArguments)
         {
             if (string.IsNullOrEmpty(commandArguments))
                 return false;

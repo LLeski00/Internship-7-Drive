@@ -4,20 +4,24 @@ using Drive.Presentation.Extensions;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
-namespace Drive.Presentation.Commands.SharedDisk
+namespace Drive.Presentation.Commands.Edit
 {
-    public class SharedDiskHelpCommand : ICommand
+    public class EditHelpCommand : IEditCommand
     {
         public string Name { get; set; } = "help";
-        public string Description { get; set; } = "Lists all commands. Usage: help";
+        public string Description { get; set; } = "Lists all edit commands. Usage: help";
         public User User { get; set; }
+        public File FileToEdit { get; set; }
+        public List<string>? NewLinesOfText { get; set; }
 
-        public SharedDiskHelpCommand(User user)
+        public EditHelpCommand(User user, File fileToEdit, List<string>? newLinesOfText)
         {
             User=user;
+            FileToEdit=fileToEdit;
+            NewLinesOfText=newLinesOfText;
         }
 
-        public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
+        public void Execute(string? commandArguments)
         {
             if (!IsCommandValid(commandArguments))
             {
@@ -26,7 +30,7 @@ namespace Drive.Presentation.Commands.SharedDisk
             }
 
             Console.WriteLine("All commands:");
-            CommandExtensions.PrintAllSharedDiskCommands(User);
+            CommandExtensions.PrintAllEditCommands(User, FileToEdit, NewLinesOfText);
         }
 
         public bool IsCommandValid(string? commandArguments)

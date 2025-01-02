@@ -85,5 +85,22 @@ public class SharedFileRepository : BaseRepository
         return userSharedFiles;
     }
 
+    public ICollection<File> GetAllFilesByUser(User user)
+    {
+        if (user == null)
+        {
+            return new List<File>();
+        }
+
+        var userSharedFiles = DbContext.SharedFiles
+                                .Where(f => f.UserId == user.Id)
+                                .Include(f => f.File)
+                                .Where(f => f.File != null)
+                                .Select(f => f.File!)
+                                .ToList();
+
+        return userSharedFiles;
+    }
+
     public ICollection<SharedFile> GetAll() => DbContext.SharedFiles.ToList();
 }

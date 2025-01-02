@@ -18,6 +18,7 @@ public class DriveDbContext : DbContext
     public DbSet<Folder> Folders => Set<Folder>();
     public DbSet<SharedFolder> SharedFolders => Set<SharedFolder>();
     public DbSet<SharedFile> SharedFiles => Set<SharedFile>();
+    public DbSet<FileComment> FileComments => Set<FileComment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,6 +81,18 @@ public class DriveDbContext : DbContext
             .HasOne(sf => sf.User)
             .WithMany(u => u.SharedFolders)
             .HasForeignKey(sf => sf.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<FileComment>()
+        .HasOne(fc => fc.File)
+        .WithMany(f => f.Comments)
+        .HasForeignKey(fc => fc.FileId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<FileComment>()
+            .HasOne(fc => fc.Author)
+            .WithMany(u => u.Comments)
+            .HasForeignKey(fc => fc.AuthorId)
             .OnDelete(DeleteBehavior.Cascade);
 
         DatabaseSeeder.Seed(modelBuilder);

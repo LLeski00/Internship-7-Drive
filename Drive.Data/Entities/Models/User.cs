@@ -18,5 +18,6 @@
 
         public ICollection<SharedFile> SharedFiles { get; set; } = new List<SharedFile>();
         public ICollection<SharedFolder> SharedFolders { get; set; } = new List<SharedFolder>();
+        public ICollection<FileComment> Comments { get; set; } = new List<FileComment>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Drive.Presentation.Abstractions;
 using Drive.Domain.Repositories;
+using Drive.Data.Entities.Models;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Enums;
@@ -11,61 +12,43 @@ namespace Drive.Presentation.Actions.Disk
     {
         private readonly FileRepository _fileRepository;
         public File FileToEdit { get; set; }
+        public User User { get; set; }
 
         public string Name { get; set; } = "Edit file";
         public int MenuIndex { get; set; }
 
-        public FileEditAction(FileRepository fileRepository, File fileToEdit)
+        public FileEditAction(FileRepository fileRepository, File fileToEdit, User user)
         {
             _fileRepository = fileRepository;
             FileToEdit = fileToEdit;
+            User = user;
         }
 
         //NEEDS REFACTORING
 
         public void Open()
         {
-            var newLinesOfText = RunEditor();
+            var newLinesOfText = RunEditor(out var command);
 
-            if (newLinesOfText == null)
+            if (command == null)
                 return;
 
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to edit this file?"))
-                return;
-
-            var content = string.Join('\n', newLinesOfText);
-            FileToEdit.Content = content;
-            FileToEdit.LastChanged = DateTime.UtcNow;
-            var response = _fileRepository.EditContent(content, FileToEdit.Id);
-
-            if (response != ResponseResultType.Success)
-            {
-                Writer.Error("ERROR: Something went wrong with editing the file.");
-                return;
-            }
+            var commandType = CommandExtensions.GetEditCommandFromString(command);
+            var commandArguments = string.Join(' ', command.Split(' ').Skip(1));
+            commandType.Execute(commandArguments, User, FileToEdit, newLinesOfText);
         }
 
+        //Could be in command extensions
         public ResponseResultType? ReadCommand(string? input)
         {
             if (!Enum.TryParse(input, out EditCommand command))
                 return ResponseResultType.NotFound;
-
-            switch (command)
-            {
-                case EditCommand.help:
-                    return null;
-                case EditCommand.saveExit:
-                    return ResponseResultType.Success;
-                case EditCommand.exit:
-                    return ResponseResultType.NoChanges;
-                default:
-                    return ResponseResultType.NotFound;
-            }
+            else
+                return ResponseResultType.Success;
         }
 
-        public List<string>? RunEditor()
+        public List<string>? RunEditor(out string? command)
         {
-
             var linesOfText = new List<string>();
 
             if (FileToEdit.Content != null)
@@ -87,14 +70,12 @@ namespace Drive.Presentation.Actions.Disk
                 }
                 else if (key.KeyChar == ':')
                 {
-                    var command = Console.ReadLine();
+                    command = Console.ReadLine();
 
-                    if (ReadCommand(command) == ResponseResultType.NotFound)
+                    if (ReadCommand(command) != ResponseResultType.Success)
                         Writer.Error("Invalid edit command! Type 'help' for a list of commands.");
-                    else if (ReadCommand(command) == ResponseResultType.Success)
-                        return linesOfText;
-                    else if (ReadCommand(command) == ResponseResultType.NoChanges)
-                        return null;
+                    else
+                        break;
                 }
                 else if (key.Key == ConsoleKey.Enter)
                 {
@@ -109,6 +90,8 @@ namespace Drive.Presentation.Actions.Disk
                     currentLine++;
                 }
             } while (true);
+
+            return linesOfText;
         }
     }
 }

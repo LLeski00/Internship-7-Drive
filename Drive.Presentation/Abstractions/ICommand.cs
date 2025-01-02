@@ -8,4 +8,5 @@ public interface ICommand
     string Name { get; set; }
     string Description { get; set; }
     void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments);
+    bool IsCommandValid(string? commandArguments);
 }

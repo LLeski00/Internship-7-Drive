@@ -118,6 +118,7 @@ public class FileRepository : BaseRepository
 
         var filesInFolder = DbContext.Files
         .Where(f => f.OwnerId == user.Id && f.ParentFolderId == currentFolderId)
+        .AsNoTracking()
         .ToList();
 
         return filesInFolder;

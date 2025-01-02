@@ -5,6 +5,7 @@ using Drive.Domain.Enums;
 using Drive.Domain.Factories;
 using Drive.Presentation.Extensions;
 using Drive.Data.Entities.Models;
+using System.IO;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -48,6 +49,18 @@ namespace Drive.Presentation.Actions.Disk
             {
                 var fileShareAction = new FileShareAction(RepositoryFactory.Create<SharedFileRepository>(), childFile, User);
                 fileShareAction.Open();
+            }
+
+            if (folder.OwnerId ==  User.Id)
+            {
+                Writer.Error("You cannot share the folder with yourself!");
+                return;
+            }
+
+            if (_sharedFolderRepository.GetAllFoldersByUser(User).Any(f => f.Id == folder.Id))
+            {
+                Writer.Error("The folder is already shared with this user!");
+                return;
             }
 
             var sharedFolder = new SharedFolder(User.Id, folder.Id);

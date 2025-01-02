@@ -25,12 +25,24 @@ namespace Drive.Presentation.Actions.Disk
 
         public void Open()
         {
+            if (FileToShare.OwnerId ==  User.Id)
+            {
+                Writer.Error("You cannot share the file with yourself!");
+                return;
+            }
+
+            if (_sharedFileRepository.GetAllFilesByUser(User).Any(f => f.Id == FileToShare.Id))
+            {
+                Writer.Error("The file is already shared with this user!");
+                return;
+            }
+
             var sharedFile = new SharedFile(User.Id, FileToShare.Id);
             var response = _sharedFileRepository.Add(sharedFile);
 
             if (response != ResponseResultType.Success)
             {
-                Writer.Error("ERROR: Something went wrong with renaming the file.");
+                Writer.Error("ERROR: Something went wrong with sharing the file.");
                 return;
             }
 

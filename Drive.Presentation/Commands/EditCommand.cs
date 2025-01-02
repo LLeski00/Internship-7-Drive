@@ -13,9 +13,11 @@ namespace Drive.Presentation.Commands
     {
         public string Name { get; set; } = "edit";
         public string Description { get; set; } = "Opens the editor of the file in the current directory. Usage: edit 'name.extension'";
+        public User User { get; set; }
 
-        public EditCommand()
+        public EditCommand(User user)
         {
+            User = user;
         }
 
         public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
@@ -38,7 +40,7 @@ namespace Drive.Presentation.Commands
                 return;
             }
 
-            var fileEditAction = new FileEditAction(RepositoryFactory.Create<FileRepository>(), fileToEdit);
+            var fileEditAction = new FileEditAction(RepositoryFactory.Create<FileRepository>(), fileToEdit, User);
             fileEditAction.Open();
         }
 

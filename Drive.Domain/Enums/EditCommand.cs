@@ -3,6 +3,7 @@
 public enum EditCommand
 {
     help,
+    comments,
     saveExit,
     exit
 }

@@ -90,5 +90,18 @@ public static class DatabaseSeeder
                 new SharedFolder(1, 5),
                 new SharedFolder(2, 2),
             });
+
+        builder.Entity<FileComment>()
+            .HasData(new List<FileComment>
+            {
+                new FileComment("Some random comment", 1, 1)
+                {
+                    Id = 1,
+                },
+                new FileComment("Even more random comment", 2, 1)
+                {
+                    Id = 2,
+                },
+            });
     }
 }

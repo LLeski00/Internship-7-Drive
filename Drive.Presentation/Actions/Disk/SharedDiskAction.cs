@@ -63,6 +63,8 @@ namespace Drive.Presentation.Actions.Disk
             } while (true);
         }
 
+        //Maybe just add SharedDiskCommand
+
         public bool IsCommandValid(Command? command)
         {
             if (command == null || command == Command.create)

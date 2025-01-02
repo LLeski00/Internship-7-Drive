@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Drive.Data.Migrations
 {
     [DbContext(typeof(DriveDbContext))]
-    [Migration("20250101222102_init")]
+    [Migration("20250102220243_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -72,9 +72,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 1,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5421),
+                            CreatedOn = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9313),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5421),
+                            LastChanged = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9316),
                             Name = "TodoList",
                             OwnerId = 1,
                             ParentFolderId = 1,
@@ -84,9 +84,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 2,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5424),
+                            CreatedOn = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9320),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5425),
+                            LastChanged = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9321),
                             Name = "TodoList2",
                             OwnerId = 1,
                             ParentFolderId = 1,
@@ -96,9 +96,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 3,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5426),
+                            CreatedOn = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9322),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5426),
+                            LastChanged = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9322),
                             Name = "TodoList3",
                             OwnerId = 1,
                             ParentFolderId = 2,
@@ -108,9 +108,9 @@ namespace Drive.Data.Migrations
                         {
                             Id = 4,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5427),
+                            CreatedOn = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9324),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5428),
+                            LastChanged = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9324),
                             Name = "TodoList4",
                             OwnerId = 2,
                             ParentFolderId = 4,
@@ -120,13 +120,66 @@ namespace Drive.Data.Migrations
                         {
                             Id = 5,
                             Content = "Some random text.",
-                            CreatedOn = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5429),
+                            CreatedOn = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9325),
                             Extension = "txt",
-                            LastChanged = new DateTime(2025, 1, 1, 22, 21, 2, 374, DateTimeKind.Utc).AddTicks(5429),
+                            LastChanged = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9325),
                             Name = "TodoList5",
                             OwnerId = 2,
                             ParentFolderId = 5,
                             Size = 20L
+                        });
+                });
+
+            modelBuilder.Entity("Drive.Data.Entities.Models.FileComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("FileId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("LastChanged")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("FileId");
+
+                    b.ToTable("FileComments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            Content = "Some random comment",
+                            CreatedOn = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9438),
+                            FileId = 1,
+                            LastChanged = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9438)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AuthorId = 2,
+                            Content = "Even more random comment",
+                            CreatedOn = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9441),
+                            FileId = 1,
+                            LastChanged = new DateTime(2025, 1, 2, 22, 2, 43, 249, DateTimeKind.Utc).AddTicks(9441)
                         });
                 });
 
@@ -331,6 +384,25 @@ namespace Drive.Data.Migrations
                     b.Navigation("ParentFolder");
                 });
 
+            modelBuilder.Entity("Drive.Data.Entities.Models.FileComment", b =>
+                {
+                    b.HasOne("Drive.Data.Entities.Models.User", "Author")
+                        .WithMany("Comments")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Drive.Data.Entities.Models.File", "File")
+                        .WithMany("Comments")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("File");
+                });
+
             modelBuilder.Entity("Drive.Data.Entities.Models.Folder", b =>
                 {
                     b.HasOne("Drive.Data.Entities.Models.User", "Owner")
@@ -389,6 +461,8 @@ namespace Drive.Data.Migrations
 
             modelBuilder.Entity("Drive.Data.Entities.Models.File", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("SharedFiles");
                 });
 
@@ -399,6 +473,8 @@ namespace Drive.Data.Migrations
 
             modelBuilder.Entity("Drive.Data.Entities.Models.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("SharedFiles");
 
                     b.Navigation("SharedFolders");
