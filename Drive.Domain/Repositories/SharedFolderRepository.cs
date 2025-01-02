@@ -67,6 +67,13 @@ public class SharedFolderRepository : BaseRepository
             return new List<Folder>();
         }
 
+        var usersRoot = RepositoryFactory.Create<FolderRepository>().GetUsersRoot(user);
+
+        if (usersRoot != null && usersRoot.Id == parentFolderId)
+        {
+            return GetFoldersFromRootByUser(user);
+        }
+
         var userSharedfolders = DbContext.SharedFolders
                             .Where(f => f.UserId == user.Id && f.Folder != null)
                             .Include(f => f.Folder)

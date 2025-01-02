@@ -22,7 +22,9 @@ namespace Drive.Presentation.Commands
             _folderRepository = folderRepository;
         }
 
-        public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
+        //Maybe change the delete actions to take the files/folders rather than strings
+
+        public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
         {
             if (commandArguments == null || !IsCommandValid(commandArguments))
             {

@@ -3,7 +3,6 @@ using Drive.Presentation.Abstractions;
 using Drive.Presentation.Extensions;
 using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
-using File = Drive.Data.Entities.Models.File;
 using Drive.Domain.Enums;
 
 namespace Drive.Presentation.Actions.Disk
@@ -36,17 +35,16 @@ namespace Drive.Presentation.Actions.Disk
                 return;
             }
 
-            var currentFolders = _sharedFolderRepository.GetFoldersFromRootByUser(User);
-            var currentFiles = _sharedFileRepository.GetFilesFromRootByUser(User);
-
             Console.Clear();
-            ProcessUserCommands(root, currentFolders, currentFiles, User);
+            ProcessUserCommands(root, User);
         }
 
-        public void ProcessUserCommands(Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, User user)
+        public void ProcessUserCommands(Folder currentDirectory, User user)
         {
             do
             {
+                var currentFolders = _sharedFolderRepository.GetFoldersByUser(User, currentDirectory.Id);
+                var currentFiles = _sharedFileRepository.GetFilesByUser(User, currentDirectory.Id);
                 DiskExtensions.PrintDirectory(currentFolders, currentFiles);
                 Reader.ReadCommand(currentDirectory, out var userInput);
                 var command = CommandExtensions.GetCommandFromString(userInput);
@@ -61,9 +59,7 @@ namespace Drive.Presentation.Actions.Disk
                     break;
 
                 var commandArguments = string.Join(' ', userInput.Split(' ').Skip(1));
-                command.SharedExecute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments, user);
-                currentFolders = _sharedFolderRepository.GetFoldersByUser(User, currentDirectory.Id);
-                currentFiles = _sharedFileRepository.GetFilesByUser(User, currentDirectory.Id);
+                command.SharedExecute(ref currentDirectory, currentFolders, currentFiles, commandArguments, user);
             } while (true);
         }
 

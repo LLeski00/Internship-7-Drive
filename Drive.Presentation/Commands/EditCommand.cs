@@ -5,6 +5,7 @@ using Drive.Presentation.Helpers;
 using Drive.Presentation.Extensions;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Actions.Disk;
+using Drive.Domain.Factories;
 
 namespace Drive.Presentation.Commands
 {
@@ -13,14 +14,11 @@ namespace Drive.Presentation.Commands
         public string Name { get; set; } = "edit";
         public string Description { get; set; } = "Opens the editor of the file in the current directory. Usage: edit 'name.extension'";
 
-        private readonly FileRepository _fileRepository;
-
-        public EditCommand(FileRepository fileRepository)
+        public EditCommand()
         {
-            _fileRepository = fileRepository;
         }
 
-        public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
+        public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
         {
             if (commandArguments == null || !IsCommandValid(commandArguments))
             {
@@ -40,7 +38,7 @@ namespace Drive.Presentation.Commands
                 return;
             }
 
-            var fileEditAction = new FileEditAction(_fileRepository, fileToEdit);
+            var fileEditAction = new FileEditAction(RepositoryFactory.Create<FileRepository>(), fileToEdit);
             fileEditAction.Open();
         }
 

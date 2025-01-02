@@ -13,11 +13,13 @@ public class CommandFactory
         var commands = new List<ICommand>
         {
             new HelpCommand(user),
-            new ChangeDirectoryCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
+            new ChangeDirectoryCommand(),
             new CreateCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), user),
             new DeleteCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new RenameCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
-            new EditCommand(RepositoryFactory.Create<FileRepository>()),
+            new EditCommand(),
+            new ShareCommand(RepositoryFactory.Create<UserRepository>()),
+            new StopShareCommand(RepositoryFactory.Create<UserRepository>()),
             new BackCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new ExitCommand()
         };
@@ -30,10 +32,10 @@ public class CommandFactory
         var commands = new List<ICommand>
         {
             new SharedDiskHelpCommand(user),
-            new ChangeDirectoryCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
+            new ChangeDirectoryCommand(),
             new SharedDiskDeleteCommand(RepositoryFactory.Create<SharedFileRepository>(), RepositoryFactory.Create<SharedFolderRepository>(), user),
             new RenameCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
-            new EditCommand(RepositoryFactory.Create<FileRepository>()),
+            new EditCommand(),
             new BackCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new ExitCommand()
         };

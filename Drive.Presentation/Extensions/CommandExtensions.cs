@@ -35,7 +35,7 @@ public static class CommandExtensions
         PrintCommands(allCommands);
     }
 
-    public static void Execute(this Command? command, ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments, User user)
+    public static void Execute(this Command? command, ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments, User user)
     {
         //Maybe not needed to create all commands
         var allCommands = CommandFactory.CreateCommands(user);
@@ -47,10 +47,10 @@ public static class CommandExtensions
             return;
         }
 
-        commandToBeExecuted.Execute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments);
+        commandToBeExecuted.Execute(ref currentDirectory, currentFolders, currentFiles, commandArguments);
     }
 
-    public static void SharedExecute(this Command? command, ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments, User user)
+    public static void SharedExecute(this Command? command, ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments, User user)
     {
         //Maybe not needed to create all commands
         var allCommands = CommandFactory.CreateSharedDiskCommands(user);
@@ -62,7 +62,7 @@ public static class CommandExtensions
             return;
         }
 
-        commandToBeExecuted.Execute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments);
+        commandToBeExecuted.Execute(ref currentDirectory, currentFolders, currentFiles, commandArguments);
     }
 
     public static Command? GetCommandFromString(string? command)

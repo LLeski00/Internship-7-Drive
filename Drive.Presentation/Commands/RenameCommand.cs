@@ -4,7 +4,6 @@ using Drive.Presentation.Abstractions;
 using Drive.Presentation.Helpers;
 using Drive.Presentation.Extensions;
 using File = Drive.Data.Entities.Models.File;
-using Drive.Domain.Enums;
 using Drive.Presentation.Actions.Disk;
 
 namespace Drive.Presentation.Commands
@@ -22,7 +21,10 @@ namespace Drive.Presentation.Commands
             _folderRepository = folderRepository;
         }
 
-        public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
+        //refactor like shareCommand
+        //change Rename actions to take actual files/folders
+
+        public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
         {
             if (commandArguments == null || !IsCommandValid(commandArguments))
             {

@@ -8,6 +8,8 @@ public enum Command
     delete,
     rename,
     edit,
+    share,
+    stopShare,
     back,
     exit
 }

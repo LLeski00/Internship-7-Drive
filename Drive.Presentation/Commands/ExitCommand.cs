@@ -14,7 +14,7 @@ namespace Drive.Presentation.Commands
         {
         }
 
-        public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
+        public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
         {
             if (!IsCommandValid(commandArguments))
             {

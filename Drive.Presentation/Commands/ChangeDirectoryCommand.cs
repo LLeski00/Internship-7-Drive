@@ -10,16 +10,12 @@ namespace Drive.Presentation.Commands
     {
         public string Name { get; set; } = "cd";
         public string Description { get; set; } = "Changes current directory. Usage: cd 'path'";
-        private readonly FileRepository _fileRepository;
-        private readonly FolderRepository _folderRepository;
 
-        public ChangeDirectoryCommand(FileRepository fileRepository, FolderRepository folderRepository)
+        public ChangeDirectoryCommand()
         {
-            _fileRepository = fileRepository;
-            _folderRepository = folderRepository;
         }
 
-        public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
+        public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
         {
             if (!IsCommandValid(commandArguments))
             {
@@ -36,10 +32,6 @@ namespace Drive.Presentation.Commands
             }
 
             currentDirectory = folderToEnter;
-
-            //Maybe can be done with navigation properties??
-            currentFolders = _folderRepository.GetByParent(currentDirectory.Id);
-            currentFiles = _fileRepository.GetByParent(currentDirectory.Id);
         }
 
         public bool IsCommandValid(string? commandArguments)

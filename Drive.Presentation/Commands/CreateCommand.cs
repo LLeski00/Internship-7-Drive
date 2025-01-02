@@ -24,7 +24,10 @@ namespace Drive.Presentation.Commands
             User = user;
         }
 
-        public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
+        //Refactor like ShareCommand
+        //Maybe change the FileAddActions and FolderAddActions to just take the file/folder not the name
+
+        public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
         {
             if (commandArguments == null || !IsCommandValid(commandArguments))
             {

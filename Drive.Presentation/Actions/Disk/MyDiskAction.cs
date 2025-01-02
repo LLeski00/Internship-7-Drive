@@ -34,17 +34,16 @@ namespace Drive.Presentation.Actions.Disk
                 return;
             }
 
-            var currentFolders = _folderRepository.GetByUser(User, root.Id);
-            var currentFiles = _fileRepository.GetByUser(User, root.Id);
-
             Console.Clear();
-            ProcessUserCommands(root, currentFolders, currentFiles, User);
+            ProcessUserCommands(root, User);
         }
 
-        public void ProcessUserCommands(Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, User user)
+        public void ProcessUserCommands(Folder currentDirectory, User user)
         {
             do
             {
+                var currentFolders = _folderRepository.GetByUser(User, currentDirectory.Id);
+                var currentFiles = _fileRepository.GetByUser(User, currentDirectory.Id);
                 DiskExtensions.PrintDirectory(currentFolders, currentFiles);
                 Reader.ReadCommand(currentDirectory, out var userInput);
                 var command = CommandExtensions.GetCommandFromString(userInput);
@@ -59,7 +58,7 @@ namespace Drive.Presentation.Actions.Disk
                     break;
 
                 var commandArguments = string.Join(' ', userInput.Split(' ').Skip(1));
-                command.Execute(ref currentDirectory, ref currentFolders, ref currentFiles, commandArguments, user);
+                command.Execute(ref currentDirectory, currentFolders, currentFiles, commandArguments, user);
             } while (true);
         }
     }

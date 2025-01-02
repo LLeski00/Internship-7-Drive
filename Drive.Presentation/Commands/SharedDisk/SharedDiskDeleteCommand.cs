@@ -24,7 +24,9 @@ namespace Drive.Presentation.Commands
             User = user;
         }
 
-        public void Execute(ref Folder currentDirectory, ref ICollection<Folder> currentFolders, ref ICollection<File> currentFiles, string? commandArguments)
+        //Refactor like shareCommand
+
+        public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
         {
             if (commandArguments == null || !IsCommandValid(commandArguments))
             {
