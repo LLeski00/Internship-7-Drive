@@ -5,6 +5,7 @@ using Drive.Presentation.Utils;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Actions.Disk;
 using Drive.Presentation.Abstractions.Commands;
+using Drive.Domain.Factories;
 
 namespace Drive.Presentation.Commands.Directory
 {
@@ -12,13 +13,9 @@ namespace Drive.Presentation.Commands.Directory
     {
         public string Name { get; set; } = "delete";
         public string Description { get; set; } = "Deletes a file or a folder in the current directory. Usage: delete file 'name.extension' or delete folder 'name'";
-        private readonly FileRepository _fileRepository;
-        private readonly FolderRepository _folderRepository;
 
-        public DeleteCommand(FileRepository fileRepository, FolderRepository folderRepository)
+        public DeleteCommand()
         {
-            _fileRepository = fileRepository;
-            _folderRepository = folderRepository;
         }
 
         public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
@@ -80,7 +77,7 @@ namespace Drive.Presentation.Commands.Directory
                 return;
             }
 
-            var fileDeleteAction = new FileDeleteAction(_fileRepository, fileToDelete);
+            var fileDeleteAction = new FileDeleteAction(RepositoryFactory.Create<FileRepository>(), fileToDelete);
             fileDeleteAction.Open();
         }
 
@@ -94,7 +91,7 @@ namespace Drive.Presentation.Commands.Directory
                 return;
             }
 
-            var folderDeleteAction = new FolderDeleteAction(_folderRepository, folderToDelete);
+            var folderDeleteAction = new FolderDeleteAction(RepositoryFactory.Create<FolderRepository>(), folderToDelete);
             folderDeleteAction.Open();
         }
     }

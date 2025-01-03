@@ -14,9 +14,7 @@ public class FileCommentRepository : BaseRepository
     public ResponseResultType Add(FileComment fileComment)
     {
         if (fileComment == null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.FileComments.Add(fileComment);
 
@@ -28,9 +26,7 @@ public class FileCommentRepository : BaseRepository
         var fileCommentToDelete = DbContext.FileComments.Find(id);
 
         if (fileCommentToDelete is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.FileComments.Remove(fileCommentToDelete);
 
@@ -42,27 +38,9 @@ public class FileCommentRepository : BaseRepository
         var fileCommentToUpdate = DbContext.FileComments.Find(id);
 
         if (fileCommentToUpdate is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         fileCommentToUpdate.Content = fileComment.Content;
-        fileCommentToUpdate.LastChanged = DateTime.UtcNow;
-
-        return SaveChanges();
-    }
-
-    public ResponseResultType EditContent(string content, int id)
-    {
-        var fileCommentToUpdate = DbContext.FileComments.Find(id);
-
-        if (fileCommentToUpdate is null)
-        {
-            return ResponseResultType.NotFound;
-        }
-
-        fileCommentToUpdate.Content = content;
-
         fileCommentToUpdate.LastChanged = DateTime.UtcNow;
 
         return SaveChanges();

@@ -5,6 +5,7 @@ using Drive.Presentation.Utils;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Actions.Disk;
 using Drive.Presentation.Abstractions.Commands;
+using Drive.Domain.Factories;
 
 namespace Drive.Presentation.Commands.Directory
 {
@@ -12,13 +13,9 @@ namespace Drive.Presentation.Commands.Directory
     {
         public string Name { get; set; } = "rename";
         public string Description { get; set; } = "Changes the name of the file or folder in the current directory. Usage: rename file 'name.extension' 'newName.newExtension' or rename folder 'name' 'name'";
-        private readonly FileRepository _fileRepository;
-        private readonly FolderRepository _folderRepository;
 
-        public RenameCommand(FileRepository fileRepository, FolderRepository folderRepository)
+        public RenameCommand()
         {
-            _fileRepository = fileRepository;
-            _folderRepository = folderRepository;
         }
 
         public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
@@ -87,7 +84,7 @@ namespace Drive.Presentation.Commands.Directory
                 return;
             }
 
-            var fileRenameAction = new FileRenameAction(_fileRepository, fileToRename, newFile);
+            var fileRenameAction = new FileRenameAction(RepositoryFactory.Create<FileRepository>(), fileToRename, newFile);
             fileRenameAction.Open();
         }
 
@@ -107,7 +104,7 @@ namespace Drive.Presentation.Commands.Directory
                 return;
             }
 
-            var folderRenameAction = new FolderRenameAction(_folderRepository, folderToRename, newName);
+            var folderRenameAction = new FolderRenameAction(RepositoryFactory.Create<FolderRepository>(), folderToRename, newName);
             folderRenameAction.Open();
         }
     }

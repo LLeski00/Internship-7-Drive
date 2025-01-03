@@ -59,12 +59,10 @@ namespace Drive.Presentation.Commands.Directory
 
             var commandArgumentsSplit = commandArguments.Split(' ');
 
-            if (commandArgumentsSplit.Length != 3 || commandArgumentsSplit[0].ToLower() != "file" && commandArgumentsSplit[0].ToLower() != "folder")
-                return false;
-
-            if (commandArgumentsSplit[0].ToLower() == "file" && !DiskUtils.IsFileNameValid(commandArgumentsSplit[1]))
-                return false;
-            else if (commandArgumentsSplit[0].ToLower() == "folder" && !DiskUtils.IsFolderNameValid(commandArgumentsSplit[1]))
+            if (commandArgumentsSplit.Length != 3 || 
+               (commandArgumentsSplit[0].ToLower() != "file" && commandArgumentsSplit[0].ToLower() != "folder") ||
+               (commandArgumentsSplit[0].ToLower() == "file" && !DiskUtils.IsFileNameValid(commandArgumentsSplit[1])) ||
+               (commandArgumentsSplit[0].ToLower() == "folder" && !DiskUtils.IsFolderNameValid(commandArgumentsSplit[1])))
                 return false;
 
             return true;

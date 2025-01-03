@@ -1,9 +1,10 @@
 ﻿using Drive.Data.Entities.Models;
+using Drive.Presentation.Extensions;
 using Drive.Presentation.Factories;
 
-namespace Drive.Presentation.Extensions;
+namespace Drive.Presentation.Utils;
 
-public static class UserExtensions
+public static class UserUtils
 {
     public static void PrintUserActions(User user)
     {

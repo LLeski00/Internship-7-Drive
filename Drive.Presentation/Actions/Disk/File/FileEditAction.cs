@@ -1,5 +1,4 @@
-﻿using Drive.Domain.Repositories;
-using Drive.Data.Entities.Models;
+﻿using Drive.Data.Entities.Models;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Helpers;
 using Drive.Presentation.Utils;
@@ -11,16 +10,14 @@ namespace Drive.Presentation.Actions.Disk
 {
     public class FileEditAction : IAction
     {
-        private readonly FileRepository _fileRepository;
         public File FileToEdit { get; set; }
         public User User { get; set; }
 
         public string Name { get; set; } = "Edit file";
         public int MenuIndex { get; set; }
 
-        public FileEditAction(FileRepository fileRepository, File fileToEdit, User user)
+        public FileEditAction(File fileToEdit, User user)
         {
-            _fileRepository = fileRepository;
             FileToEdit = fileToEdit;
             User = user;
         }

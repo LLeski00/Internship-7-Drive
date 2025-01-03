@@ -15,9 +15,7 @@ public class FileRepository : BaseRepository
     public ResponseResultType Add(File file)
     {
         if (file == null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.Files.Add(file);
 
@@ -29,9 +27,7 @@ public class FileRepository : BaseRepository
         var fileToDelete = DbContext.Files.Find(id);
 
         if (fileToDelete is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.Files.Remove(fileToDelete);
 
@@ -43,14 +39,13 @@ public class FileRepository : BaseRepository
         var fileToUpdate = DbContext.Files.Find(id);
 
         if (fileToUpdate is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         fileToUpdate.Name = file.Name;
         fileToUpdate.Extension = file.Extension;
         fileToUpdate.Content = file.Content;
         fileToUpdate.Size = file.Size;
+        fileToUpdate.ParentFolderId = file.ParentFolderId;
         fileToUpdate.LastChanged = DateTime.UtcNow;
 
         return SaveChanges();
@@ -61,9 +56,7 @@ public class FileRepository : BaseRepository
         var fileToUpdate = DbContext.Files.Find(id);
 
         if (fileToUpdate is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         fileToUpdate.Name = fileName;
         fileToUpdate.Extension = fileExtension;
@@ -77,9 +70,7 @@ public class FileRepository : BaseRepository
         var fileToUpdate = DbContext.Files.Find(id);
 
         if (fileToUpdate is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         fileToUpdate.Content = content;
 
@@ -98,9 +89,7 @@ public class FileRepository : BaseRepository
     public ICollection<File> GetAllByUser(User user)
     {
         if (user == null)
-        {
             return new List<File>();
-        }
 
         var userFiles = DbContext.Files
             .Where(f => f.OwnerId == user.Id)
@@ -112,9 +101,7 @@ public class FileRepository : BaseRepository
     public ICollection<File> GetByUser(User user, int currentFolderId)
     {
         if (user == null)
-        {
             return new List<File>();
-        }
 
         var filesInFolder = DbContext.Files
         .Where(f => f.OwnerId == user.Id && f.ParentFolderId == currentFolderId)

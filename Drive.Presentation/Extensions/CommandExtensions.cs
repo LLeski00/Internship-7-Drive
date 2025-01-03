@@ -22,6 +22,20 @@ public static class CommandExtensions
         commandToBeExecuted.Execute(ref currentDirectory, currentFolders, currentFiles, commandArguments);
     }
 
+    public static void Execute(this SharedDiskCommand? command, ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments, User user)
+    {
+        var allCommands = CommandFactory.CreateSharedDiskCommands(user);
+        var commandToBeExecuted = allCommands.FirstOrDefault(c => c.Name == command.ToString());
+
+        if (commandToBeExecuted == null)
+        {
+            Writer.Error("The command was not found.");
+            return;
+        }
+
+        commandToBeExecuted.Execute(ref currentDirectory, currentFolders, currentFiles, commandArguments);
+    }
+
     public static void Execute(this EditCommand? command, string? commandArguments, User user, File fileToEdit, List<string>? newLinesOfText)
     {
         var allCommands = CommandFactory.CreateEditCommands(user, fileToEdit, newLinesOfText);
@@ -48,19 +62,5 @@ public static class CommandExtensions
         }
 
         commandToBeExecuted.Execute(commandArguments);
-    }
-
-    public static void Execute(this SharedDiskCommand? command, ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments, User user)
-    {
-        var allCommands = CommandFactory.CreateSharedDiskCommands(user);
-        var commandToBeExecuted = allCommands.FirstOrDefault(c => c.Name == command.ToString());
-
-        if (commandToBeExecuted == null)
-        {
-            Writer.Error("The command was not found.");
-            return;
-        }
-
-        commandToBeExecuted.Execute(ref currentDirectory, currentFolders, currentFiles, commandArguments);
     }
 }

@@ -29,7 +29,22 @@ namespace Drive.Presentation.Commands.Comment
                 return;
             }
 
-            var fileCommentAddAction = new FileCommentAddAction(RepositoryFactory.Create<FileCommentRepository>(), File, User);
+            Console.WriteLine("Enter the comment:");
+            var newComment = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(newComment))
+            {
+                Writer.Error("The comment cannot be empty!");
+
+                if (Reader.PromptUserConfirmation())
+                    Execute(commandArguments);
+
+                return;
+            }
+
+            var fileComment = new FileComment(newComment, User.Id, File.Id);
+
+            var fileCommentAddAction = new FileCommentAddAction(RepositoryFactory.Create<FileCommentRepository>(), fileComment);
             fileCommentAddAction.Open();
         }
 

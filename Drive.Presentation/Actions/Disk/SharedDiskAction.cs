@@ -40,8 +40,6 @@ namespace Drive.Presentation.Actions.Disk
             ProcessUserCommands(root, User);
         }
 
-        //Refactor needed
-
         public void ProcessUserCommands(Folder currentDirectory, User user)
         {
             do

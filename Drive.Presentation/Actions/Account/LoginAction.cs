@@ -1,8 +1,8 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Repositories;
-using Drive.Presentation.Extensions;
 using Drive.Presentation.Abstractions.Actions;
+using Drive.Presentation.Utils;
 
 namespace Drive.Presentation.Actions.Account
 {
@@ -31,7 +31,7 @@ namespace Drive.Presentation.Actions.Account
 
             Console.WriteLine("Successfully logged in.");
             Console.ReadLine();
-            UserExtensions.PrintUserActions(user);
+            UserUtils.PrintUserActions(user);
         }
 
         public User? FindUser()

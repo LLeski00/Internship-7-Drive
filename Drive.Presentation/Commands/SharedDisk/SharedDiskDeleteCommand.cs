@@ -1,13 +1,11 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
-using Drive.Presentation.Extensions;
 using Drive.Presentation.Utils;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Actions.Disk;
 using Drive.Presentation.Abstractions.Commands;
 using Drive.Domain.Factories;
-using System.Xml.Linq;
 
 namespace Drive.Presentation.Commands.SharedDisk
 {
@@ -15,14 +13,10 @@ namespace Drive.Presentation.Commands.SharedDisk
     {
         public string Name { get; set; } = "delete";
         public string Description { get; set; } = "Deletes a file or a folder in the current directory. Usage: delete file 'name.extension' or delete folder 'name'";
-        private readonly SharedFileRepository _sharedFileRepository;
-        private readonly SharedFolderRepository _sharedFolderRepository;
         public User User { get; set; }
 
-        public SharedDiskDeleteCommand(SharedFileRepository sharedFileRepository, SharedFolderRepository sharedFolderRepository, User user)
+        public SharedDiskDeleteCommand(User user)
         {
-            _sharedFileRepository = sharedFileRepository;
-            _sharedFolderRepository = sharedFolderRepository;
             User = user;
         }
 
@@ -58,12 +52,10 @@ namespace Drive.Presentation.Commands.SharedDisk
 
             var commandArgumentsSplit = commandArguments.Split(' ');
 
-            if (commandArgumentsSplit.Length != 2 || (commandArgumentsSplit[0].ToLower() != "file" && commandArgumentsSplit[0].ToLower() != "folder"))
-                return false;
-
-            if (commandArgumentsSplit[0].ToLower() == "file" && !DiskUtils.IsFileNameValid(commandArgumentsSplit[1]))
-                return false;
-            else if (commandArgumentsSplit[0].ToLower() == "folder" && !DiskUtils.IsFolderNameValid(commandArgumentsSplit[1]))
+            if (commandArgumentsSplit.Length != 2 ||
+               (commandArgumentsSplit[0].ToLower() != "file" && commandArgumentsSplit[0].ToLower() != "folder") ||
+               (commandArgumentsSplit[0].ToLower() == "file" && !DiskUtils.IsFileNameValid(commandArgumentsSplit[1])) ||
+               (commandArgumentsSplit[0].ToLower() == "folder" && !DiskUtils.IsFolderNameValid(commandArgumentsSplit[1])))
                 return false;
 
             return true;
@@ -85,10 +77,10 @@ namespace Drive.Presentation.Commands.SharedDisk
                 return;
             }
 
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this file from your shared disk?"))
+            if (!UserUtils.ConfirmUserAction("Are you sure you want to delete this file from your shared disk?"))
                 return;
 
-            var fileDeleteAction = new FileDeleteSharedAction(_sharedFileRepository, fileToDelete, User);
+            var fileDeleteAction = new FileDeleteSharedAction(RepositoryFactory.Create<SharedFileRepository>(), fileToDelete, User);
             fileDeleteAction.Open();
         }
 
@@ -102,10 +94,10 @@ namespace Drive.Presentation.Commands.SharedDisk
                 return;
             }
 
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this folder from your shared disk?"))
+            if (!UserUtils.ConfirmUserAction("Are you sure you want to delete this folder from your shared disk?"))
                 return;
 
-            var folderDeleteAction = new FolderDeleteSharedAction(_sharedFolderRepository, _sharedFileRepository, folderToDelete, User);
+            var folderDeleteAction = new FolderDeleteSharedAction(RepositoryFactory.Create<SharedFolderRepository>(), RepositoryFactory.Create<SharedFileRepository>(), folderToDelete, User);
             folderDeleteAction.Open();
         }
     }

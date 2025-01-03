@@ -2,8 +2,8 @@
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Enums;
-using Drive.Presentation.Extensions;
 using Drive.Presentation.Abstractions.Actions;
+using Drive.Presentation.Utils;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -28,7 +28,7 @@ namespace Drive.Presentation.Actions.Disk
             if (NewLinesOfText == null)
                 return;
 
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to edit this file?"))
+            if (!UserUtils.ConfirmUserAction("Are you sure you want to edit this file?"))
                 return;
 
             var content = string.Join('\n', NewLinesOfText);

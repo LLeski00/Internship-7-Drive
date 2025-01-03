@@ -1,9 +1,9 @@
 ﻿using Drive.Domain.Repositories;
 using Drive.Domain.Enums;
-using Drive.Presentation.Extensions;
 using Drive.Presentation.Helpers;
 using Drive.Presentation.Abstractions.Actions;
 using File = Drive.Data.Entities.Models.File;
+using Drive.Presentation.Utils;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -23,7 +23,7 @@ namespace Drive.Presentation.Actions.Disk
 
         public void Open()
         {
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to delete this file?"))
+            if (!UserUtils.ConfirmUserAction("Are you sure you want to delete this file?"))
                 return;
 
             var fileResponse = _fileRepository.Delete(FileToDelete.Id);

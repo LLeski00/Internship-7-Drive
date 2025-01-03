@@ -20,10 +20,9 @@ public class UserRepository : BaseRepository
     public ResponseResultType Delete(int id)
     {
         var userToDelete = DbContext.Users.Find(id);
+
         if (userToDelete is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.Users.Remove(userToDelete);
 
@@ -33,10 +32,9 @@ public class UserRepository : BaseRepository
     public ResponseResultType Update(User user, int id)
     {
         var userToUpdate = DbContext.Users.Find(id);
+
         if (userToUpdate is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         userToUpdate.FirstName = user.FirstName;
         userToUpdate.LastName = user.LastName;

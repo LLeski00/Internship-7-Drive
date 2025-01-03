@@ -2,9 +2,7 @@
 using Drive.Presentation.Helpers;
 using Drive.Domain.Enums;
 using Drive.Domain.Factories;
-using Drive.Presentation.Extensions;
 using Drive.Data.Entities.Models;
-using System.IO;
 using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk

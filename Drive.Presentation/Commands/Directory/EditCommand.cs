@@ -1,10 +1,8 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
 using Drive.Presentation.Utils;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Actions.Disk;
-using Drive.Domain.Factories;
 using Drive.Presentation.Abstractions.Commands;
 
 namespace Drive.Presentation.Commands.Directory
@@ -40,7 +38,7 @@ namespace Drive.Presentation.Commands.Directory
                 return;
             }
 
-            var fileEditAction = new FileEditAction(RepositoryFactory.Create<FileRepository>(), fileToEdit, User);
+            var fileEditAction = new FileEditAction(fileToEdit, User);
             fileEditAction.Open();
         }
 

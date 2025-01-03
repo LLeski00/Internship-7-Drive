@@ -1,9 +1,9 @@
 ﻿using Drive.Domain.Repositories;
 using Drive.Data.Entities.Models;
 using Drive.Domain.Enums;
-using Drive.Presentation.Extensions;
 using Drive.Presentation.Helpers;
 using Drive.Presentation.Abstractions.Actions;
+using Drive.Presentation.Utils;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -25,7 +25,7 @@ namespace Drive.Presentation.Actions.Disk
 
         public void Open()
         {
-            if (!UserExtensions.ConfirmUserAction("Are you sure you want to rename this folder?"))
+            if (!UserUtils.ConfirmUserAction("Are you sure you want to rename this folder?"))
                 return;
 
             var response = _folderRepository.Rename(NewFolderName, FolderToRename.Id);

@@ -15,9 +15,7 @@ public class FolderRepository : BaseRepository
     public ResponseResultType Add(Folder folder)
     {
         if (folder == null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.Folders.Add(folder);
 
@@ -29,9 +27,7 @@ public class FolderRepository : BaseRepository
         var folderToDelete = DbContext.Folders.Find(id);
 
         if (folderToDelete is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.Folders.Remove(folderToDelete);
 
@@ -43,13 +39,10 @@ public class FolderRepository : BaseRepository
         var folderToUpdate = DbContext.Folders.Find(id);
 
         if (folderToUpdate is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         folderToUpdate.Name = folder.Name;
         folderToUpdate.ParentFolderId = folder.ParentFolderId;
-        folderToUpdate.ParentFolder = folder.ParentFolder;
 
         return SaveChanges();
     }
@@ -59,9 +52,7 @@ public class FolderRepository : BaseRepository
         var folderToUpdate = DbContext.Folders.Find(id);
 
         if (folderToUpdate is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         folderToUpdate.Name = name;
 
@@ -73,9 +64,7 @@ public class FolderRepository : BaseRepository
     public ICollection<Folder> GetAllByUser(User user)
     {
         if (user == null)
-        {
             return new List<Folder>();
-        }
 
         var userFolders = DbContext.Folders
             .Where(f => f.OwnerId == user.Id)
@@ -87,9 +76,7 @@ public class FolderRepository : BaseRepository
     public ICollection<Folder> GetByUser(User user, int currentFolderId)
     {
         if (user == null)
-        {
             return new List<Folder>();
-        }
 
         var foldersInFolder = DbContext.Folders
             .Where(f => f.OwnerId == user.Id && f.ParentFolderId == currentFolderId)
@@ -111,9 +98,7 @@ public class FolderRepository : BaseRepository
     public Folder? GetUsersRoot(User user)
     {
         if (user == null)
-        {
             return null;
-        }
 
         var rootFolder = DbContext.Folders
             .FirstOrDefault(f => f.OwnerId == user.Id && f.ParentFolderId == null);

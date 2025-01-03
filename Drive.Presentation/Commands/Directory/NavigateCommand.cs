@@ -10,7 +10,7 @@ namespace Drive.Presentation.Commands.Directory
     public class NavigateCommand : IDirectoryCommand
     {
         public string Name { get; set; } = "navigate";
-        public string Description { get; set; } = "Enters navigation mode. Command: navigate, Usage: navigate through the folders with arrow keys (left for back and enter for forward). Press escape to exit navigation mode.";
+        public string Description { get; set; } = "Enters navigation mode. Usage: navigate, Controls: Navigate through the folders with arrow keys (left for back and enter for forward). Press escape to exit navigation mode.";
         private readonly FileRepository _fileRepository;
         private readonly FolderRepository _folderRepository;
         public User User { get; set; }

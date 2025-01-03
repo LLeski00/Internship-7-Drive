@@ -16,9 +16,7 @@ public class SharedFileRepository : BaseRepository
     public ResponseResultType Add(SharedFile file)
     {
         if (file == null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.SharedFiles.Add(file);
 
@@ -30,9 +28,7 @@ public class SharedFileRepository : BaseRepository
         var fileToDelete = DbContext.SharedFiles.FirstOrDefault(f => f.FileId == fileId && f.UserId == userId);
 
         if (fileToDelete is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.SharedFiles.Remove(fileToDelete);
 
@@ -42,22 +38,19 @@ public class SharedFileRepository : BaseRepository
     public ICollection<File> GetFilesFromRootByUser(User user)
     {
         if (user == null)
-        {
             return new List<File>();
-        }
 
         var _sharedFolderRepository = RepositoryFactory.Create<SharedFolderRepository>();
         var userSharedFolders = _sharedFolderRepository.GetAllFoldersByUser(user)
                                 .Select(usf => usf.Id)
                                 .ToList();
-
         var userSharedFiles = DbContext.SharedFiles
-                            .Where(f => f.UserId == user.Id && f.File != null)
-                            .Include(f => f.File)
-                            .Where(f => !userSharedFolders.Contains(f.File!.ParentFolderId))
-                            .Select(f => f.File!)
-                            .AsNoTracking()
-                            .ToList();
+                                .Where(f => f.UserId == user.Id && f.File != null)
+                                .Include(f => f.File)
+                                .Where(f => !userSharedFolders.Contains(f.File!.ParentFolderId))
+                                .Select(f => f.File!)
+                                .AsNoTracking()
+                                .ToList();
 
         return userSharedFiles;
     }
@@ -65,9 +58,7 @@ public class SharedFileRepository : BaseRepository
     public ICollection<File> GetFilesByUser(User user, int parentFolderId)
     {
         if (user == null)
-        {
             return new List<File>();
-        }
 
         var _sharedFolderRepository = RepositoryFactory.Create<SharedFolderRepository>();
 
@@ -88,9 +79,7 @@ public class SharedFileRepository : BaseRepository
     public ICollection<File> GetAllFilesByUser(User user)
     {
         if (user == null)
-        {
             return new List<File>();
-        }
 
         var userSharedFiles = DbContext.SharedFiles
                                 .Where(f => f.UserId == user.Id)
@@ -105,9 +94,7 @@ public class SharedFileRepository : BaseRepository
     public ICollection<User> GetUsersByFile(File file)
     {
         if (file == null)
-        {
             return new List<User>();
-        }
 
         var users = DbContext.SharedFiles
                                 .Where(f => f.FileId == file.Id)

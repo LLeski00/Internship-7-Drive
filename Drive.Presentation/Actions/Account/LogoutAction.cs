@@ -1,8 +1,4 @@
-﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Helpers;
-using Drive.Domain.Repositories;
-using Drive.Presentation.Extensions;
-using Drive.Presentation.Abstractions.Actions;
+﻿using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Account
 {

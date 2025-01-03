@@ -8,7 +8,7 @@ namespace Drive.Presentation.Commands.Directory
     public class ExitCommand : IDirectoryCommand
     {
         public string Name { get; set; } = "exit";
-        public string Description { get; set; } = "Exits from the my disk menu. Usage: exit";
+        public string Description { get; set; } = "Exits from the disk menu. Usage: exit";
 
         public ExitCommand()
         {

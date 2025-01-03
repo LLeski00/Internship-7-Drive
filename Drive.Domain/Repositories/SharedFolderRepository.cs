@@ -3,7 +3,6 @@ using Drive.Data.Entities;
 using Drive.Domain.Enums;
 using SharedFolder = Drive.Data.Entities.Models.SharedFolder;
 using Microsoft.EntityFrameworkCore;
-using Drive.Domain.Factories;
 
 namespace Drive.Domain.Repositories;
 
@@ -16,9 +15,7 @@ public class SharedFolderRepository : BaseRepository
     public ResponseResultType Add(SharedFolder folder)
     {
         if (folder == null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.SharedFolders.Add(folder);
 
@@ -30,21 +27,17 @@ public class SharedFolderRepository : BaseRepository
         var folderToDelete = DbContext.SharedFolders.FirstOrDefault(f => f.FolderId == folderId && f.UserId == userId);
 
         if (folderToDelete is null)
-        {
             return ResponseResultType.NotFound;
-        }
 
         DbContext.SharedFolders.Remove(folderToDelete);
 
         return SaveChanges();
     }
 
-        public ICollection<Folder> GetFoldersFromRootByUser(User user)
+    public ICollection<Folder> GetFoldersFromRootByUser(User user)
     {
         if (user == null)
-        {
             return new List<Folder>();
-        }
 
         var userSharedFolders = GetAllFoldersByUser(user)
                                 .Select(usf => usf.Id)
@@ -63,9 +56,7 @@ public class SharedFolderRepository : BaseRepository
     public ICollection<Folder> GetFoldersByUser(User user, int parentFolderId)
     {
         if (user == null)
-        {
             return new List<Folder>();
-        }
 
         if (!GetUsersByFolderId(parentFolderId).Any(u => u.Id == user.Id))
             return GetFoldersFromRootByUser(user);
@@ -83,9 +74,7 @@ public class SharedFolderRepository : BaseRepository
     public ICollection<Folder> GetAllFoldersByUser(User user)
     {
         if (user == null)
-        {
             return new List<Folder>();
-        }
 
         var userSharedFolders = DbContext.SharedFolders
                                 .Where(f => f.UserId == user.Id)
