@@ -1,7 +1,6 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Domain.Enums;
 using Drive.Presentation.Abstractions;
-using Drive.Presentation.Commands;
 using Drive.Presentation.Factories;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
@@ -10,12 +9,19 @@ namespace Drive.Presentation.Extensions;
 
 public static class CommandExtensions
 {
+    //MAKE ONE FATHER INTERFACE ICOMMAND AND HAVE IT HAVE THE NAME AND THE DESCRIPTION
+
     public static void PrintCommand(ICommand command)
     {
         Console.WriteLine($"- {command.Name}\n\t{command.Description}");
     }
 
     public static void PrintCommand(IEditCommand command)
+    {
+        Console.WriteLine($"- {command.Name}\n\t{command.Description}");
+    }
+
+    public static void PrintCommand(ICommentCommand command)
     {
         Console.WriteLine($"- {command.Name}\n\t{command.Description}");
     }
@@ -29,6 +35,14 @@ public static class CommandExtensions
     }
 
     public static void PrintCommands(IList<IEditCommand> commands)
+    {
+        foreach (var command in commands)
+        {
+            PrintCommand(command);
+        }
+    }
+
+    public static void PrintCommands(IList<ICommentCommand> commands)
     {
         foreach (var command in commands)
         {
@@ -51,6 +65,12 @@ public static class CommandExtensions
     public static void PrintAllEditCommands(User user, File fileToEdit, List<string>? newLinesOfText)
     {
         var allCommands = CommandFactory.CreateEditCommands(user, fileToEdit, newLinesOfText);
+        PrintCommands(allCommands);
+    }
+
+    public static void PrintAllCommentCommands(User user, File fileToEdit)
+    {
+        var allCommands = CommandFactory.CreateCommentCommands(user, fileToEdit);
         PrintCommands(allCommands);
     }
 

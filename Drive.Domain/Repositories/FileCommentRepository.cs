@@ -78,5 +78,13 @@ public class FileCommentRepository : BaseRepository
         return DbContext.FileComments.Where(fc => fc.FileId == file.Id).OrderBy(fc => fc.LastChanged).ToList();
     }
 
+    public FileComment? GetByIdInFile(File file, int fileCommentId)
+    {
+        if (file == null)
+            return null;
+
+        return DbContext.FileComments.FirstOrDefault(fc => fc.Id == fileCommentId && fc.FileId == file.Id);
+    }
+
     public ICollection<FileComment> GetAll() => DbContext.FileComments.ToList();
 }

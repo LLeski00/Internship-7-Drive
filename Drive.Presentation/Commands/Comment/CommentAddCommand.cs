@@ -6,16 +6,16 @@ using Drive.Presentation.Actions.Disk;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
-namespace Drive.Presentation.Commands.Edit
+namespace Drive.Presentation.Commands.Comment
 {
-    public class CommentOpenCommand : IEditCommand
+    public class CommentAddCommand : ICommentCommand
     {
-        public string Name { get; set; } = "comments";
-        public string Description { get; set; } = "Enters the file comments. Usage: comments";
+        public string Name { get; set; } = "add";
+        public string Description { get; set; } = "Posts the comment to the file. Usage: add";
         public User User { get; set; }
         public File File { get; set; }
 
-        public CommentOpenCommand(User user, File file)
+        public CommentAddCommand(User user, File file)
         {
             User=user;
             File=file;
@@ -29,8 +29,8 @@ namespace Drive.Presentation.Commands.Edit
                 return;
             }
 
-            var fileCommentsAction = new FileCommentsAction(File, User);
-            fileCommentsAction.Open();
+            var fileCommentAddAction = new FileCommentAddAction(RepositoryFactory.Create<FileCommentRepository>(), File, User);
+            fileCommentAddAction.Open();
         }
 
         public bool IsCommandValid(string? commandArguments)

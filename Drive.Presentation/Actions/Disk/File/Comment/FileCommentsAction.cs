@@ -1,5 +1,4 @@
 ﻿using Drive.Presentation.Abstractions;
-using Drive.Domain.Repositories;
 using Drive.Data.Entities.Models;
 using Drive.Presentation.Utils;
 using File = Drive.Data.Entities.Models.File;
@@ -11,22 +10,22 @@ namespace Drive.Presentation.Actions.Disk
 {
     public class FileCommentsAction : IAction
     {
-        private readonly FileCommentRepository _fileCommentRepository;
         public File File { get; set; }
         public User User { get; set; }
 
-        public string Name { get; set; } = "Add file";
+        public string Name { get; set; } = "Enters file comments";
         public int MenuIndex { get; set; }
 
-        public FileCommentsAction(FileCommentRepository fileCommentRepository, File file, User user)
+        public FileCommentsAction(File file, User user)
         {
-            _fileCommentRepository = fileCommentRepository;
             File = file;
             User = user;
         }
 
         public void Open()
         {
+            Console.Clear();
+
             do
             {
                 CommentUtils.PrintAllFileComments(File);

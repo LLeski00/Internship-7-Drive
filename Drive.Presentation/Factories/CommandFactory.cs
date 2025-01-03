@@ -4,6 +4,7 @@ using Drive.Presentation.Abstractions;
 using Drive.Presentation.Commands;
 using Drive.Presentation.Commands.Edit;
 using Drive.Presentation.Commands.SharedDisk;
+using Drive.Presentation.Commands.Comment;
 using Drive.Data.Entities.Models;
 using File = Drive.Data.Entities.Models.File;
 
@@ -59,14 +60,15 @@ public class CommandFactory
         return commands;
     }
 
-    public static IList<ICommentCommand> CreateCommentCommands(User user, File fileToEdit)
+    public static IList<ICommentCommand> CreateCommentCommands(User user, File file)
     {
         var commands = new List<ICommentCommand>
         {
-            /*new CommentAddCommand(user),
-            new CommentEditCommand(user),
-            new CommentDeleteCommand(user),
-            new CommentExitCommand()*/
+            new CommentHelpCommand(user, file),
+            new CommentAddCommand(user, file),
+            new CommentEditCommand(RepositoryFactory.Create<FileCommentRepository>(), user, file),
+            new CommentDeleteCommand(RepositoryFactory.Create<FileCommentRepository>(), user, file),
+            new CommentExitCommand()
         };
 
         return commands;

@@ -1,21 +1,19 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Domain.Factories;
-using Drive.Domain.Repositories;
 using Drive.Presentation.Abstractions;
-using Drive.Presentation.Actions.Disk;
+using Drive.Presentation.Extensions;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
-namespace Drive.Presentation.Commands.Edit
+namespace Drive.Presentation.Commands.SharedDisk
 {
-    public class CommentOpenCommand : IEditCommand
+    public class CommentHelpCommand : ICommentCommand
     {
-        public string Name { get; set; } = "comments";
-        public string Description { get; set; } = "Enters the file comments. Usage: comments";
+        public string Name { get; set; } = "help";
+        public string Description { get; set; } = "Lists all comment commands. Usage: help";
         public User User { get; set; }
         public File File { get; set; }
 
-        public CommentOpenCommand(User user, File file)
+        public CommentHelpCommand(User user, File file)
         {
             User=user;
             File=file;
@@ -29,18 +27,18 @@ namespace Drive.Presentation.Commands.Edit
                 return;
             }
 
-            var fileCommentsAction = new FileCommentsAction(File, User);
-            fileCommentsAction.Open();
+            Console.WriteLine("All commands:");
+            CommandExtensions.PrintAllCommentCommands(User, File);
         }
 
         public bool IsCommandValid(string? commandArguments)
         {
             if (!string.IsNullOrEmpty(commandArguments))
+            {
                 return false;
+            }
 
             return true;
         }
     }
 }
-
-
