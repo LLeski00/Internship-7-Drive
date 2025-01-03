@@ -41,8 +41,6 @@ namespace Drive.Presentation.Commands
             }
 
             currentDirectory = newCurrentDirectory;
-            currentFolders = _folderRepository.GetByParent(currentDirectory.Id);
-            currentFiles = _fileRepository.GetByParent(currentDirectory.Id);
         }
 
         public bool IsCommandValid(string? commandArguments)

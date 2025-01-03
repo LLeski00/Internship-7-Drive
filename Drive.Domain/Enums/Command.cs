@@ -11,5 +11,6 @@ public enum Command
     share,
     stopShare,
     back,
+    navigate,
     exit
 }

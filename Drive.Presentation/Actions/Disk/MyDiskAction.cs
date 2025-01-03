@@ -3,7 +3,6 @@ using Drive.Presentation.Abstractions;
 using Drive.Presentation.Extensions;
 using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
-using File = Drive.Data.Entities.Models.File;
 using Drive.Domain.Enums;
 
 namespace Drive.Presentation.Actions.Disk

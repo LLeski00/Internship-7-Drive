@@ -46,6 +46,41 @@ public static class DiskExtensions
         PrintFiles(files);
     }
 
+    public static void PrintDirectoryNavigate(ICollection<Folder> folders, ICollection<File> files, ref int currentIndex)
+    {
+        if (folders.Count == 0 && files.Count == 0)
+        {
+            Console.WriteLine("The folder is empty!");
+            return;
+        }
+
+        var totalCount = folders.Count + files.Count;
+        
+        if (currentIndex < 0)
+            currentIndex = 0;
+        else if (currentIndex >= totalCount)
+            currentIndex = totalCount - 1;
+
+        if (currentIndex < folders.Count)
+        {
+            var sortedFolders = folders.OrderBy(f => f.Name).ToList();
+            PrintFolders(sortedFolders.Take(currentIndex).ToList());
+            Console.Write("\t->");
+            PrintFolder(sortedFolders[currentIndex]);
+            PrintFolders(sortedFolders.Skip(currentIndex + 1).ToList());
+            PrintFiles(files);
+        }
+        else
+        {
+            var sortedFiles = files.OrderBy(f => f.LastChanged).ToList();
+            PrintFolders(folders);
+            PrintFiles(sortedFiles.Take(currentIndex - folders.Count).ToList());
+            Console.Write("\t->");
+            PrintFile(sortedFiles[currentIndex - folders.Count]);
+            PrintFiles(sortedFiles.Skip(currentIndex - folders.Count + 1).ToList());
+        }
+    }
+
     public static bool IsFileNameValid(string file)
     {
         var fileSplitByDot = file.Split('.');
@@ -64,7 +99,6 @@ public static class DiskExtensions
         return true;
     }
 
-    //Possibly unnecessary
     public static File? GetFileByName(ICollection<File> currentFiles, string fileName, string fileExtension)
     {
         return currentFiles.FirstOrDefault(f => f.Name == fileName && f.Extension == fileExtension);

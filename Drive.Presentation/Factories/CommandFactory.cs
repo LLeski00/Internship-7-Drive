@@ -25,6 +25,7 @@ public class CommandFactory
             new ShareCommand(RepositoryFactory.Create<UserRepository>()),
             new StopShareCommand(RepositoryFactory.Create<UserRepository>()),
             new BackCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
+            new NavigateCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), user),
             new ExitCommand()
         };
 
@@ -41,6 +42,7 @@ public class CommandFactory
             new RenameCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new EditCommand(user),
             new BackCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
+            new SharedDiskNavigateCommand(RepositoryFactory.Create<FolderRepository>(), RepositoryFactory.Create<SharedFolderRepository>(), RepositoryFactory.Create<SharedFileRepository>(), user),
             new ExitCommand()
         };
 

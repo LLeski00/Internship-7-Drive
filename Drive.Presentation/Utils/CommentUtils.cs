@@ -33,8 +33,8 @@ public static class CommentUtils
         var author = RepositoryFactory.Create<UserRepository>().GetById(comment.AuthorId);
 
         if (author == null)
-            Console.WriteLine($"{comment.Id}-Unknown\n{comment.Content}");
+            Console.WriteLine($"{comment.Id}-Unknown-{comment.LastChanged}\n{comment.Content}");
         else
-            Console.WriteLine($"{comment.Id}-{author.Email}\n{comment.Content}");
+            Console.WriteLine($"{comment.Id}-{author.Email}-{comment.LastChanged}\n{comment.Content}");
     }
 }
