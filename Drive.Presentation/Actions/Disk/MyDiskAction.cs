@@ -1,9 +1,10 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
 using Drive.Presentation.Extensions;
 using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
-using Drive.Domain.Enums;
+using Drive.Presentation.Utils;
+using Drive.Presentation.Enums;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -43,9 +44,9 @@ namespace Drive.Presentation.Actions.Disk
             {
                 var currentFolders = _folderRepository.GetByUser(User, currentDirectory.Id);
                 var currentFiles = _fileRepository.GetByUser(User, currentDirectory.Id);
-                DiskExtensions.PrintDirectory(currentFolders, currentFiles);
+                DiskUtils.PrintDirectory(currentFolders, currentFiles);
                 Reader.ReadCommand(currentDirectory, out var userInput);
-                var command = CommandExtensions.GetCommandFromString(userInput);
+                var command = CommandUtils.GetDirectoryCommandFromString(userInput);
 
                 if (command == null)
                 {
@@ -53,7 +54,7 @@ namespace Drive.Presentation.Actions.Disk
                     continue;
                 }
 
-                if (userInput == Command.exit.ToString())
+                if (userInput == DirectoryCommand.exit.ToString())
                     break;
 
                 var commandArguments = string.Join(' ', userInput.Split(' ').Skip(1));

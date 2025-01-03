@@ -1,9 +1,9 @@
 ﻿using Drive.Data.Entities.Models;
 using File = Drive.Data.Entities.Models.File;
 
-namespace Drive.Presentation.Extensions;
+namespace Drive.Presentation.Utils;
 
-public static class DiskExtensions
+public static class DiskUtils
 {
     public static void PrintFolder(Folder folder)
     {
@@ -55,7 +55,7 @@ public static class DiskExtensions
         }
 
         var totalCount = folders.Count + files.Count;
-        
+
         if (currentIndex < 0)
             currentIndex = 0;
         else if (currentIndex >= totalCount)
@@ -108,4 +108,5 @@ public static class DiskExtensions
     {
         return currentFolders.FirstOrDefault(f => f.Name == folderName);
     }
+
 }

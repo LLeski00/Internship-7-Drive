@@ -1,10 +1,10 @@
-﻿using Drive.Presentation.Abstractions;
-using Drive.Data.Entities.Models;
+﻿using Drive.Data.Entities.Models;
 using Drive.Presentation.Utils;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Extensions;
 using Drive.Presentation.Helpers;
-using Drive.Domain.Enums;
+using Drive.Presentation.Enums;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -31,7 +31,7 @@ namespace Drive.Presentation.Actions.Disk
                 CommentUtils.PrintAllFileComments(File);
                 Console.Write(">>");
                 var userInput = Console.ReadLine();
-                var command = CommandExtensions.GetCommentCommandFromString(userInput);
+                var command = CommandUtils.GetCommentCommandFromString(userInput);
 
                 if (command == null || userInput == null)
                 {

@@ -67,12 +67,8 @@ public class SharedFolderRepository : BaseRepository
             return new List<Folder>();
         }
 
-        var usersRoot = RepositoryFactory.Create<FolderRepository>().GetUsersRoot(user);
-
-        if (usersRoot != null && usersRoot.Id == parentFolderId)
-        {
+        if (!GetUsersByFolderId(parentFolderId).Any(u => u.Id == user.Id))
             return GetFoldersFromRootByUser(user);
-        }
 
         var userSharedfolders = DbContext.SharedFolders
                             .Where(f => f.UserId == user.Id && f.Folder != null)
@@ -82,23 +78,6 @@ public class SharedFolderRepository : BaseRepository
                             .ToList();
 
         return userSharedfolders;
-    }
-
-    public ICollection<Folder> GetFoldersByUser(User user)
-    {
-        if (user == null)
-        {
-            return new List<Folder>();
-        }
-
-        var userSharedFolders = DbContext.SharedFolders
-                                .Where(f => f.UserId == user.Id)
-                                .Include(f => f.Folder)
-                                .Where(f => f.Folder != null)
-                                .Select(f => f.Folder!)
-                                .ToList();
-
-        return userSharedFolders;
     }
 
     public ICollection<Folder> GetAllFoldersByUser(User user)
@@ -118,15 +97,10 @@ public class SharedFolderRepository : BaseRepository
         return userSharedFolders;
     }
 
-    public ICollection<User> GetUsersByFolder(Folder folder)
+    public ICollection<User> GetUsersByFolderId(int folderId)
     {
-        if (folder == null)
-        {
-            return new List<User>();
-        }
-
         var users = DbContext.SharedFolders
-                                .Where(f => f.FolderId == folder.Id)
+                                .Where(f => f.FolderId == folderId)
                                 .Include(f => f.User)
                                 .Where(f => f.User != null)
                                 .Select(f => f.User!)

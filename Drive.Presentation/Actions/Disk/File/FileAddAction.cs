@@ -1,50 +1,35 @@
-﻿using Drive.Presentation.Abstractions;
-using Drive.Domain.Repositories;
-using Drive.Data.Entities.Models;
+﻿using Drive.Domain.Repositories;
 using Drive.Domain.Enums;
 using Drive.Presentation.Extensions;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
+using Drive.Presentation.Abstractions.Actions;
+using Drive.Domain.Factories;
 
 namespace Drive.Presentation.Actions.Disk
 {
     public class FileAddAction : IAction
     {
-        private readonly FileRepository _fileRepository;
-        public string FileToAdd { get; set; }
-        public Folder ParentFolder { get; set; }
-        public ICollection<File> CurrentFiles { get; set; }
-        public User User { get; set; }
+        private readonly FileRepository _fileRepository; 
+        private readonly SharedFolderRepository _sharedFolderRepository;
+        public File FileToAdd { get; set; }
 
         public string Name { get; set; } = "Add file";
         public int MenuIndex { get; set; }
 
-        public FileAddAction(FileRepository fileRepository, string fileToAdd, Folder parentFolder, ICollection<File> currentFiles, User user)
+        public FileAddAction(FileRepository fileRepository, SharedFolderRepository sharedfolderRepository, File fileToAdd)
         {
             _fileRepository = fileRepository;
+            _sharedFolderRepository = sharedfolderRepository;
             FileToAdd = fileToAdd;
-            ParentFolder = parentFolder;
-            CurrentFiles = currentFiles;
-            User = user;
         }
 
         public void Open()
         {
-            var fileSplitByDot = FileToAdd.Split('.');
-            var fileName = fileSplitByDot[0];
-            var fileExtension = fileSplitByDot[1];
-
-            if (DiskExtensions.GetFileByName(CurrentFiles, fileName, fileExtension) != null)
-            {
-                Writer.Error("File with that name and extension already exists in this folder!");
-                return;
-            }
-
             if (!UserExtensions.ConfirmUserAction("Are you sure you want to add this file?"))
                 return;
 
-            var newFile = new File(fileName, fileExtension, User.Id, ParentFolder.Id);
-            var fileResponse = _fileRepository.Add(newFile);
+            var fileResponse = _fileRepository.Add(FileToAdd);
 
             if (fileResponse != ResponseResultType.Success)
             {
@@ -52,8 +37,18 @@ namespace Drive.Presentation.Actions.Disk
                 return;
             }
 
-            CurrentFiles.Add(newFile);
             Console.WriteLine("File successfully added.");
+
+            var usersToShare = _sharedFolderRepository.GetUsersByFolderId(FileToAdd.ParentFolderId);
+
+            if (usersToShare.Count == 0)
+                return;
+
+            foreach ( var user in usersToShare)
+            {
+                var fileShareAction = new FileShareAction(RepositoryFactory.Create<SharedFileRepository>(), FileToAdd, user);
+                fileShareAction.Open();
+            }
         }
     }
 }

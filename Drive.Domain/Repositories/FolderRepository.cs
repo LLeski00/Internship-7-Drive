@@ -2,6 +2,7 @@
 using Drive.Data.Entities;
 using Drive.Domain.Enums;
 using Folder = Drive.Data.Entities.Models.Folder;
+using Microsoft.EntityFrameworkCore;
 
 namespace Drive.Domain.Repositories;
 
@@ -92,6 +93,7 @@ public class FolderRepository : BaseRepository
 
         var foldersInFolder = DbContext.Folders
             .Where(f => f.OwnerId == user.Id && f.ParentFolderId == currentFolderId)
+            .AsNoTracking()
             .ToList();
 
         return foldersInFolder;

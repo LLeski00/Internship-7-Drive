@@ -56,6 +56,7 @@ public class SharedFileRepository : BaseRepository
                             .Include(f => f.File)
                             .Where(f => !userSharedFolders.Contains(f.File!.ParentFolderId))
                             .Select(f => f.File!)
+                            .AsNoTracking()
                             .ToList();
 
         return userSharedFiles;
@@ -68,18 +69,17 @@ public class SharedFileRepository : BaseRepository
             return new List<File>();
         }
 
-        var usersRoot = RepositoryFactory.Create<FolderRepository>().GetUsersRoot(user);
+        var _sharedFolderRepository = RepositoryFactory.Create<SharedFolderRepository>();
 
-        if (usersRoot != null && usersRoot.Id == parentFolderId)
-        {
+        if (!_sharedFolderRepository.GetUsersByFolderId(parentFolderId).Any(u => u.Id == user.Id))
             return GetFilesFromRootByUser(user);
-        }
 
         var userSharedFiles = DbContext.SharedFiles
                             .Where(f => f.UserId == user.Id && f.File != null)
                             .Include(f => f.File)
                             .Where(f => f.File!.ParentFolderId == parentFolderId)
                             .Select(f => f.File!)
+                            .AsNoTracking()
                             .ToList();
 
         return userSharedFiles;
@@ -100,6 +100,23 @@ public class SharedFileRepository : BaseRepository
                                 .ToList();
 
         return userSharedFiles;
+    }
+
+    public ICollection<User> GetUsersByFile(File file)
+    {
+        if (file == null)
+        {
+            return new List<User>();
+        }
+
+        var users = DbContext.SharedFiles
+                                .Where(f => f.FileId == file.Id)
+                                .Include(f => f.User)
+                                .Where(f => f.User != null)
+                                .Select(f => f.User!)
+                                .ToList();
+
+        return users;
     }
 
     public ICollection<SharedFile> GetAll() => DbContext.SharedFiles.ToList();

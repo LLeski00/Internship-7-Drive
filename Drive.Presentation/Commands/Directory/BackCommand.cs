@@ -1,12 +1,12 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Domain.Repositories;
-using Drive.Presentation.Abstractions;
+using Drive.Presentation.Abstractions.Commands;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
-namespace Drive.Presentation.Commands
+namespace Drive.Presentation.Commands.Directory
 {
-    public class BackCommand : ICommand
+    public class BackCommand : IDirectoryCommand
     {
         public string Name { get; set; } = "back";
         public string Description { get; set; } = "Goes back to parent folder. Usage: back";
@@ -27,7 +27,7 @@ namespace Drive.Presentation.Commands
                 return;
             }
 
-            if (currentDirectory.ParentFolderId == null) 
+            if (currentDirectory.ParentFolderId == null)
             {
                 Writer.Error("You are in the root folder.");
                 return;
@@ -35,7 +35,8 @@ namespace Drive.Presentation.Commands
 
             var newCurrentDirectory = _folderRepository.GetById(currentDirectory.ParentFolderId);
 
-            if (newCurrentDirectory == null) {
+            if (newCurrentDirectory == null)
+            {
                 Writer.Error("Could not find parent folder.");
                 return;
             }
@@ -46,9 +47,7 @@ namespace Drive.Presentation.Commands
         public bool IsCommandValid(string? commandArguments)
         {
             if (!string.IsNullOrEmpty(commandArguments))
-            {
                 return false;
-            }
 
             return true;
         }

@@ -1,8 +1,8 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Repositories;
 using Drive.Presentation.Extensions;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Account
 {
@@ -22,7 +22,7 @@ namespace Drive.Presentation.Actions.Account
             while (user == null)
             {
                 Thread.Sleep(30000);
-                bool cont = Reader.DoYouWantToContinue();
+                bool cont = Reader.PromptUserConfirmation();
                 if (cont)
                     user = FindUser();
                 else

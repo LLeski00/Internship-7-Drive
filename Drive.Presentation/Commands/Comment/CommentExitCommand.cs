@@ -1,7 +1,7 @@
-﻿using Drive.Presentation.Abstractions;
+﻿using Drive.Presentation.Abstractions.Commands;
 using Drive.Presentation.Helpers;
 
-namespace Drive.Presentation.Commands
+namespace Drive.Presentation.Commands.Comment
 {
     public class CommentExitCommand : ICommentCommand
     {

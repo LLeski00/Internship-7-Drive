@@ -1,8 +1,8 @@
-﻿using Drive.Presentation.Abstractions;
-using Drive.Domain.Repositories;
+﻿using Drive.Domain.Repositories;
 using Drive.Data.Entities.Models;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Enums;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -37,7 +37,7 @@ namespace Drive.Presentation.Actions.Disk
             {
                 Writer.Error("Please enter the comment!");
 
-                if (Reader.DoYouWantToContinue())
+                if (Reader.PromptUserConfirmation())
                     Open();
 
                 return;

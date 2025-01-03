@@ -1,8 +1,8 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Repositories;
 using Drive.Domain.Enums;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Account.Settings
 {
@@ -26,7 +26,10 @@ namespace Drive.Presentation.Actions.Account.Settings
             if (!Reader.TryReadEmail("Enter your new email:", out string newEmail))
             {
                 Writer.Error("Invalid email!");
-                Open(); //Do you want to continue
+
+                if(Reader.PromptUserConfirmation())
+                    Open();
+
                 return;
             }
 
@@ -35,7 +38,24 @@ namespace Drive.Presentation.Actions.Account.Settings
             if (user != null)
             {
                 Writer.Error("There is already a user with that email.");
-                Open(); //Do you want to continue
+
+                if (Reader.PromptUserConfirmation())
+                    Open();
+
+                return;
+            }
+
+            var captcha = Writer.GenerateRandomCaptcha();
+
+            Console.WriteLine($"Enter this captcha: {captcha}");
+
+            if (Console.ReadLine() != captcha)
+            {
+                Writer.Error("Invalid captcha!");
+
+                if (Reader.PromptUserConfirmation())
+                    Open();
+
                 return;
             }
 
@@ -45,7 +65,10 @@ namespace Drive.Presentation.Actions.Account.Settings
             if (response != ResponseResultType.Success)
             {
                 Writer.Error("ERROR: Something went wrong with updating the user");
-                //Do you want to continue
+
+                if (Reader.PromptUserConfirmation())
+                    Open();
+
                 return;
             }
 

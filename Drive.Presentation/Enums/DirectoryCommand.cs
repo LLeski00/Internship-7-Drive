@@ -1,6 +1,6 @@
-﻿namespace Drive.Domain.Enums;
+﻿namespace Drive.Presentation.Enums;
 
-public enum Command
+public enum DirectoryCommand
 {
     help,
     create,

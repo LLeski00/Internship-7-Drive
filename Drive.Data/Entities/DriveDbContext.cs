@@ -84,10 +84,10 @@ public class DriveDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<FileComment>()
-        .HasOne(fc => fc.File)
-        .WithMany(f => f.Comments)
-        .HasForeignKey(fc => fc.FileId)
-        .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(fc => fc.File)
+            .WithMany(f => f.Comments)
+            .HasForeignKey(fc => fc.FileId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<FileComment>()
             .HasOne(fc => fc.Author)

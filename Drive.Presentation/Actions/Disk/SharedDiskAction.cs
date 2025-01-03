@@ -1,9 +1,10 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
 using Drive.Presentation.Extensions;
 using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
-using Drive.Domain.Enums;
+using Drive.Presentation.Utils;
+using Drive.Presentation.Enums;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -39,38 +40,43 @@ namespace Drive.Presentation.Actions.Disk
             ProcessUserCommands(root, User);
         }
 
+        //Refactor needed
+
         public void ProcessUserCommands(Folder currentDirectory, User user)
         {
             do
             {
+                if (!_sharedFolderRepository.GetUsersByFolderId(currentDirectory.Id).Any(u => u.Id == user.Id))
+                {
+                    var root = _folderRepository.GetUsersRoot(User);
+
+                    if (root == null)
+                    {
+                        Writer.Error("Error while fetching users root folder.");
+                        break;
+                    }
+
+                    currentDirectory = root;
+                }
+
                 var currentFolders = _sharedFolderRepository.GetFoldersByUser(User, currentDirectory.Id);
                 var currentFiles = _sharedFileRepository.GetFilesByUser(User, currentDirectory.Id);
-                DiskExtensions.PrintDirectory(currentFolders, currentFiles);
+                DiskUtils.PrintDirectory(currentFolders, currentFiles);
                 Reader.ReadCommand(currentDirectory, out var userInput);
-                var command = CommandExtensions.GetCommandFromString(userInput);
+                var command = CommandUtils.GetSharedDiskCommandFromString(userInput);
 
-                if (!IsCommandValid(command))
+                if (command == null)
                 {
                     Writer.Error("Invalid command. Use 'help' for a list of commands.");
                     continue;
                 }
 
-                if (userInput == Command.exit.ToString())
+                if (userInput == SharedDiskCommand.exit.ToString())
                     break;
 
                 var commandArguments = string.Join(' ', userInput.Split(' ').Skip(1));
-                command.SharedExecute(ref currentDirectory, currentFolders, currentFiles, commandArguments, user);
+                command.Execute(ref currentDirectory, currentFolders, currentFiles, commandArguments, user);
             } while (true);
-        }
-
-        //Maybe just add SharedDiskCommand
-
-        public bool IsCommandValid(Command? command)
-        {
-            if (command == null || command == Command.create)
-                return false;
-
-            return true;
         }
     }
 }

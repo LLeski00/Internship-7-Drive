@@ -1,24 +1,24 @@
 ﻿using Drive.Domain.Factories;
 using Drive.Domain.Repositories;
-using Drive.Presentation.Abstractions;
-using Drive.Presentation.Commands;
+using Drive.Presentation.Commands.Directory;
 using Drive.Presentation.Commands.Edit;
 using Drive.Presentation.Commands.SharedDisk;
 using Drive.Presentation.Commands.Comment;
 using Drive.Data.Entities.Models;
 using File = Drive.Data.Entities.Models.File;
+using Drive.Presentation.Abstractions.Commands;
 
 namespace Drive.Presentation.Factories;
 
 public class CommandFactory
 {
-    public static IList<ICommand> CreateCommands(User user)
+    public static IList<IDirectoryCommand> CreateDirectoryCommands(User user)
     {
-        var commands = new List<ICommand>
+        var commands = new List<IDirectoryCommand>
         {
             new HelpCommand(user),
             new ChangeDirectoryCommand(),
-            new CreateCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>(), user),
+            new CreateCommand(user),
             new DeleteCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new RenameCommand(RepositoryFactory.Create<FileRepository>(), RepositoryFactory.Create<FolderRepository>()),
             new EditCommand(user),
@@ -32,9 +32,9 @@ public class CommandFactory
         return commands;
     }
 
-    public static IList<ICommand> CreateSharedDiskCommands(User user)
+    public static IList<IDirectoryCommand> CreateSharedDiskCommands(User user)
     {
-        var commands = new List<ICommand>
+        var commands = new List<IDirectoryCommand>
         {
             new SharedDiskHelpCommand(user),
             new ChangeDirectoryCommand(),
@@ -54,7 +54,7 @@ public class CommandFactory
         var commands = new List<IEditCommand>
         {
             new EditHelpCommand(user, fileToEdit, newLinesOfText),
-            new CommentOpenCommand(user, fileToEdit),
+            new EditOpenCommentsCommand(user, fileToEdit),
             new EditSaveAndExitCommand(fileToEdit, newLinesOfText),
             new EditExitCommand(),
         };

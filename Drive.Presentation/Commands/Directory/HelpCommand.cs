@@ -1,17 +1,20 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
+using Drive.Presentation.Abstractions.Commands;
+using Drive.Presentation.Utils;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
-namespace Drive.Presentation.Commands
+namespace Drive.Presentation.Commands.Directory
 {
-    public class ExitCommand : ICommand
+    public class HelpCommand : IDirectoryCommand
     {
-        public string Name { get; set; } = "exit";
-        public string Description { get; set; } = "Exits from the my disk menu. Usage: exit";
+        public string Name { get; set; } = "help";
+        public string Description { get; set; } = "Lists all commands. Usage: help";
+        public User User { get; set; }
 
-        public ExitCommand()
+        public HelpCommand(User user)
         {
+            User = user;
         }
 
         public void Execute(ref Folder currentDirectory, ICollection<Folder> currentFolders, ICollection<File> currentFiles, string? commandArguments)
@@ -21,6 +24,9 @@ namespace Drive.Presentation.Commands
                 Writer.CommandError(Name, Description);
                 return;
             }
+
+            Console.WriteLine("All commands:");
+            CommandUtils.PrintAllDirectoryCommands(User);
         }
 
         public bool IsCommandValid(string? commandArguments)

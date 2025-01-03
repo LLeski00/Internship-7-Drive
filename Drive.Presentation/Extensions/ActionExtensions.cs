@@ -1,7 +1,8 @@
-﻿using Drive.Presentation.Abstractions;
+﻿using Drive.Presentation.Abstractions.Actions;
 using Drive.Presentation.Actions;
 using Drive.Presentation.Actions.Account;
 using Drive.Presentation.Helpers;
+using Drive.Presentation.Utils;
 
 namespace Drive.Presentation.Extensions;
 
@@ -16,7 +17,7 @@ public static class ActionExtensions
         do
         {
             Console.Clear();
-            PrintActions(actions);
+            ActionUtils.PrintActions(actions);
 
             var isValidInput = int.TryParse(Console.ReadLine(), out var actionIndex);
             if (!isValidInput)
@@ -44,14 +45,6 @@ public static class ActionExtensions
         foreach (var action in actions)
         {
             action.MenuIndex = ++index;
-        }
-    }
-
-    public static void PrintActions(IList<IAction> actions)
-    {
-        foreach (var action in actions)
-        {
-            Console.WriteLine($"{action.MenuIndex}. {action.Name}");
         }
     }
 }

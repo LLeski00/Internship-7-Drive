@@ -1,4 +1,4 @@
-﻿namespace Drive.Domain.Enums;
+﻿namespace Drive.Presentation.Enums;
 
 public enum EditCommand
 {

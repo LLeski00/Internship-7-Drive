@@ -1,12 +1,11 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Domain.Repositories;
-using Drive.Presentation.Abstractions;
+using Drive.Presentation.Abstractions.Commands;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
-namespace Drive.Presentation.Commands
+namespace Drive.Presentation.Commands.Directory
 {
-    public class ChangeDirectoryCommand : ICommand
+    public class ChangeDirectoryCommand : IDirectoryCommand
     {
         public string Name { get; set; } = "cd";
         public string Description { get; set; } = "Changes current directory. Usage: cd 'path'";

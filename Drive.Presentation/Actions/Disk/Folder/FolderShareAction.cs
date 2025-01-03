@@ -1,11 +1,11 @@
-﻿using Drive.Presentation.Abstractions;
-using Drive.Domain.Repositories;
+﻿using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Enums;
 using Drive.Domain.Factories;
 using Drive.Presentation.Extensions;
 using Drive.Data.Entities.Models;
 using System.IO;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -31,6 +31,18 @@ namespace Drive.Presentation.Actions.Disk
 
         public void Open()
         {
+            if (FolderToShare.OwnerId ==  User.Id)
+            {
+                Writer.Error("You cannot share the folder with yourself!");
+                return;
+            }
+
+            if (_sharedFolderRepository.GetAllFoldersByUser(User).Any(f => f.Id == FolderToShare.Id))
+            {
+                Writer.Error("The folder is already shared with this user!");
+                return;
+            }
+
             ShareFolderAndChildren(FolderToShare);
         }
 
@@ -51,28 +63,19 @@ namespace Drive.Presentation.Actions.Disk
                 fileShareAction.Open();
             }
 
-            if (folder.OwnerId ==  User.Id)
-            {
-                Writer.Error("You cannot share the folder with yourself!");
-                return;
-            }
-
             if (_sharedFolderRepository.GetAllFoldersByUser(User).Any(f => f.Id == folder.Id))
-            {
-                Writer.Error("The folder is already shared with this user!");
                 return;
-            }
 
             var sharedFolder = new SharedFolder(User.Id, folder.Id);
             var response = _sharedFolderRepository.Add(sharedFolder);
 
             if (response != ResponseResultType.Success)
             {
-                Writer.Error("ERROR: Something went wrong with renaming the folder.");
+                Writer.Error("ERROR: Something went wrong with sharing the folder.");
                 return;
             }
 
-            Console.WriteLine($"{FolderToShare.Name} successfully shared.");
+            Console.WriteLine($"{folder.Name} successfully shared.");
         }
     }
 }

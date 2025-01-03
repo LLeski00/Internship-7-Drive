@@ -1,6 +1,6 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
-using Drive.Presentation.Extensions;
+using Drive.Presentation.Abstractions.Commands;
+using Drive.Presentation.Utils;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
@@ -30,7 +30,7 @@ namespace Drive.Presentation.Commands.Edit
             }
 
             Console.WriteLine("All commands:");
-            CommandExtensions.PrintAllEditCommands(User, FileToEdit, NewLinesOfText);
+            CommandUtils.PrintAllEditCommands(User, FileToEdit, NewLinesOfText);
         }
 
         public bool IsCommandValid(string? commandArguments)

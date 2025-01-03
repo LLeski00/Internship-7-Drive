@@ -1,4 +1,6 @@
 ﻿using Drive.Data.Entities.Models;
+using Drive.Presentation.Enums;
+using Drive.Presentation.Utils;
 
 namespace Drive.Presentation.Helpers;
 
@@ -64,6 +66,19 @@ public static class Reader
         return TryReadName(out name);
     }
 
+
+    public static bool TryReadNameAndExtensionFromFile(string file, out (string fileName, string fileExtension) result)
+    {
+        result = default;
+
+        if (!DiskUtils.IsFileNameValid(file))
+            return false;
+
+        var fileSplitByDot = file.Split('.');
+        result = (fileSplitByDot[0], fileSplitByDot[1]);
+        return true;
+    }
+
     public static bool TryReadEmail(string message, out string email)
     {
         Console.WriteLine(message);
@@ -109,10 +124,19 @@ public static class Reader
         input = Console.ReadLine() ?? string.Empty;
     }
 
-    //Change name
-    public static bool DoYouWantToContinue()
+    public static EditCommand? TryReadEditCommand()
     {
-        Console.WriteLine("If you want to go back to previous page press y");
+        var input = Console.ReadLine();
+
+        if (!Enum.TryParse(input, out EditCommand command))
+            return null;
+
+        return command;
+    }
+
+    public static bool PromptUserConfirmation()
+    {
+        Console.WriteLine("If you want to go back to previous page press 'y'");
         var input = Console.ReadLine();
         if (input == "y")
             return false;

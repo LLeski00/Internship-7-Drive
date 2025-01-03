@@ -1,9 +1,9 @@
-﻿using Drive.Presentation.Abstractions;
-using Drive.Domain.Repositories;
+﻿using Drive.Domain.Repositories;
 using Drive.Domain.Enums;
 using Drive.Presentation.Helpers;
 using Drive.Data.Entities.Models;
 using Drive.Domain.Factories;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -27,20 +27,15 @@ namespace Drive.Presentation.Actions.Disk
 
         public void Open()
         {
-            if (DeleteFolderAndChildren(FolderToDelete) == ResponseResultType.Success)
-                Console.WriteLine("The folder was successfully removed from shared disk.");
+            DeleteFolderAndChildren(FolderToDelete);
         }
 
-        public ResponseResultType DeleteFolderAndChildren(Folder folderToDelete)
+        public void DeleteFolderAndChildren(Folder folderToDelete)
         {
             var subfolders = _sharedFolderRepository.GetFoldersByUser(User, folderToDelete.Id);
 
             foreach (var subfolder in subfolders)
-            {
-                var response = DeleteFolderAndChildren(subfolder);
-                if (response != ResponseResultType.Success)
-                    return response;
-            }
+                DeleteFolderAndChildren(subfolder);
 
             var childrenFiles = _sharedFileRepository.GetFilesByUser(User, folderToDelete.Id);
 
@@ -53,9 +48,12 @@ namespace Drive.Presentation.Actions.Disk
             var folderResponse = _sharedFolderRepository.Delete(folderToDelete.Id, User.Id);
 
             if (folderResponse != ResponseResultType.Success)
+            {
                 Writer.Error($"ERROR: Something went wrong with deleting the folder {folderToDelete.Name}.");
+                return;
+            }
 
-            return folderResponse;
+            Console.WriteLine($"{folderToDelete.Name} successfully removed from the shared disk.");
         }
     }
 }

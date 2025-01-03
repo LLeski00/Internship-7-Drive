@@ -1,8 +1,8 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Repositories;
 using Drive.Domain.Enums;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Account.Settings
 {
@@ -26,15 +26,34 @@ namespace Drive.Presentation.Actions.Account.Settings
             if (Console.ReadLine() != User.Password)
             {
                 Writer.Error("Incorrect password!");
-                Open(); //Do you want to continue
+
+                if (Reader.PromptUserConfirmation())
+                    Open();
+
                 return;
-            
             }
 
             if (!Reader.TryReadNewPassword("Enter your new password:", out string newPassword))
             {
                 Writer.Error("Invalid password!");
-                Open(); //Do you want to continue
+
+                if (Reader.PromptUserConfirmation())
+                    Open();
+
+                return;
+            }
+
+            var captcha = Writer.GenerateRandomCaptcha();
+
+            Console.WriteLine($"Enter this captcha: {captcha}");
+
+            if (Console.ReadLine() != captcha)
+            {
+                Writer.Error("Invalid captcha!");
+
+                if (Reader.PromptUserConfirmation())
+                    Open();
+
                 return;
             }
 
@@ -44,7 +63,10 @@ namespace Drive.Presentation.Actions.Account.Settings
             if (response != ResponseResultType.Success)
             {
                 Writer.Error("ERROR: Something went wrong with updating the user");
-                //Do you want to continue
+
+                if (Reader.PromptUserConfirmation())
+                    Open();
+
                 return;
             }
 

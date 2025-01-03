@@ -1,15 +1,15 @@
 ﻿using Drive.Data.Entities.Models;
 using Drive.Domain.Repositories;
-using Drive.Presentation.Abstractions;
 using Drive.Presentation.Helpers;
-using Drive.Presentation.Extensions;
+using Drive.Presentation.Utils;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Actions.Disk;
 using Drive.Domain.Factories;
+using Drive.Presentation.Abstractions.Commands;
 
-namespace Drive.Presentation.Commands
+namespace Drive.Presentation.Commands.Directory
 {
-    public class EditCommand : ICommand
+    public class EditCommand : IDirectoryCommand
     {
         public string Name { get; set; } = "edit";
         public string Description { get; set; } = "Opens the editor of the file in the current directory. Usage: edit 'name.extension'";
@@ -49,7 +49,7 @@ namespace Drive.Presentation.Commands
             if (string.IsNullOrEmpty(commandArguments))
                 return false;
 
-            if (commandArguments.Contains(' ') || !DiskExtensions.IsFileNameValid(commandArguments))
+            if (commandArguments.Contains(' ') || !DiskUtils.IsFileNameValid(commandArguments))
                 return false;
 
             return true;

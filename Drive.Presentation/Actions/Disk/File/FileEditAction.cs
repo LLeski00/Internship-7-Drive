@@ -1,10 +1,11 @@
-﻿using Drive.Presentation.Abstractions;
-using Drive.Domain.Repositories;
+﻿using Drive.Domain.Repositories;
 using Drive.Data.Entities.Models;
 using File = Drive.Data.Entities.Models.File;
 using Drive.Presentation.Helpers;
-using Drive.Domain.Enums;
+using Drive.Presentation.Utils;
+using Drive.Presentation.Enums;
 using Drive.Presentation.Extensions;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -24,8 +25,6 @@ namespace Drive.Presentation.Actions.Disk
             User = user;
         }
 
-        //NEEDS REFACTORING
-
         public void Open()
         {
             var newLinesOfText = RunEditor(out var command);
@@ -33,18 +32,9 @@ namespace Drive.Presentation.Actions.Disk
             if (command == null)
                 return;
 
-            var commandType = CommandExtensions.GetEditCommandFromString(command);
+            var commandType = CommandUtils.GetEditCommandFromString(command);
             var commandArguments = string.Join(' ', command.Split(' ').Skip(1));
             commandType.Execute(commandArguments, User, FileToEdit, newLinesOfText);
-        }
-
-        //Could be in command extensions
-        public ResponseResultType? ReadCommand(string? input)
-        {
-            if (!Enum.TryParse(input, out EditCommand command))
-                return ResponseResultType.NotFound;
-            else
-                return ResponseResultType.Success;
         }
 
         public List<string>? RunEditor(out string? command)
@@ -59,7 +49,7 @@ namespace Drive.Presentation.Actions.Disk
             do
             {
                 Console.Clear();
-                Writer.PrintLines(linesOfText.Take(linesOfText.Count).ToList());
+                Writer.PrintLines(linesOfText);
 
                 var key = Console.ReadKey();
 
@@ -72,7 +62,7 @@ namespace Drive.Presentation.Actions.Disk
                 {
                     command = Console.ReadLine();
 
-                    if (ReadCommand(command) != ResponseResultType.Success)
+                    if (!Enum.TryParse(command, out EditCommand editCommand))
                         Writer.Error("Invalid edit command! Type 'help' for a list of commands.");
                     else
                         break;

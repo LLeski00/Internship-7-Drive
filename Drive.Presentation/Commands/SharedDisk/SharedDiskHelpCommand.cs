@@ -1,12 +1,12 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Presentation.Abstractions;
-using Drive.Presentation.Extensions;
+using Drive.Presentation.Abstractions.Commands;
+using Drive.Presentation.Utils;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
 namespace Drive.Presentation.Commands.SharedDisk
 {
-    public class SharedDiskHelpCommand : ICommand
+    public class SharedDiskHelpCommand : IDirectoryCommand
     {
         public string Name { get; set; } = "help";
         public string Description { get; set; } = "Lists all commands. Usage: help";
@@ -26,7 +26,7 @@ namespace Drive.Presentation.Commands.SharedDisk
             }
 
             Console.WriteLine("All commands:");
-            CommandExtensions.PrintAllSharedDiskCommands(User);
+            CommandUtils.PrintAllSharedDiskCommands(User);
         }
 
         public bool IsCommandValid(string? commandArguments)

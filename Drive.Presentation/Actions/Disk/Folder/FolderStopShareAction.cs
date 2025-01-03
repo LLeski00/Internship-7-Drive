@@ -1,9 +1,9 @@
-﻿using Drive.Presentation.Abstractions;
-using Drive.Domain.Repositories;
+﻿using Drive.Domain.Repositories;
 using Drive.Presentation.Helpers;
 using Drive.Domain.Enums;
 using Drive.Data.Entities.Models;
 using Drive.Domain.Factories;
+using Drive.Presentation.Abstractions.Actions;
 
 namespace Drive.Presentation.Actions.Disk
 {
@@ -29,6 +29,12 @@ namespace Drive.Presentation.Actions.Disk
 
         public void Open()
         {
+            if (!_sharedFolderRepository.GetAllFoldersByUser(User).Any(f => f.Id == SharedFolder.Id))
+            {
+                Writer.Error("The folder is not shared with this user!");
+                return;
+            }
+
             StopSharingFolderAndChildren(SharedFolder);
         }
 

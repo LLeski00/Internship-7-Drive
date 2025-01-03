@@ -1,4 +1,4 @@
-﻿namespace Drive.Presentation.Abstractions
+﻿namespace Drive.Presentation.Abstractions.Actions
 {
     public interface IMenuAction : IAction
     {

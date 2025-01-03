@@ -1,14 +1,13 @@
 ﻿using Drive.Data.Entities.Models;
-using Drive.Domain.Enums;
 using Drive.Domain.Repositories;
-using Drive.Presentation.Abstractions;
-using Drive.Presentation.Extensions;
+using Drive.Presentation.Abstractions.Commands;
+using Drive.Presentation.Utils;
 using Drive.Presentation.Helpers;
 using File = Drive.Data.Entities.Models.File;
 
-namespace Drive.Presentation.Commands
+namespace Drive.Presentation.Commands.SharedDisk
 {
-    public class SharedDiskNavigateCommand : ICommand
+    public class SharedDiskNavigateCommand : IDirectoryCommand
     {
         public string Name { get; set; } = "navigate";
         public string Description { get; set; } = "Enters navigation mode. Command: navigate, Usage: navigate through the folders with arrow keys (left for back and enter for forward). Press escape to exit navigation mode.";
@@ -40,7 +39,7 @@ namespace Drive.Presentation.Commands
                 currentFolders = _sharedFolderRepository.GetFoldersByUser(User, currentDirectory.Id);
                 currentFiles = _sharedFileRepository.GetFilesByUser(User, currentDirectory.Id);
                 Console.Clear();
-                DiskExtensions.PrintDirectoryNavigate(currentFolders, currentFiles, ref currentIndex);
+                DiskUtils.PrintDirectoryNavigate(currentFolders, currentFiles, ref currentIndex);
 
                 var key = Console.ReadKey(true);
 
@@ -61,6 +60,7 @@ namespace Drive.Presentation.Commands
                         currentIndex = 0;
                         break;
                     case ConsoleKey.Escape:
+                        Console.Clear();
                         return;
                     default:
                         break;
